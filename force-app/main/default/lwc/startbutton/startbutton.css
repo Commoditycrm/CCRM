@@ -1,0 +1,46 @@
+.c-container {
+    border: 1px transparent #d8dde6;
+    margin: 10px 0 10px 0;
+}
+.c-heightset
+{
+    height: 100px;
+    width:300px;
+}
+
+.button {
+    border: 0;
+    background-color: #F04923;
+    border-radius: 4px;
+    border-color:#F04923;
+    color: white;
+   
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 20px;
+  
+    cursor: pointer;
+   
+    font-family: 'Larsseit-Regular';
+    font-weight: 500;
+    height: 60px;
+    width:230px;
+}
+.button:hover{
+color: #fff;
+    position: relative;
+    bottom: 2px;
+    box-shadow: 0 10px 13px -7px #999, 5px 5px 15px 5px transparent;
+}
+.button:focus
+{outline: none;}
+.my-brand {
+   
+   
+    --sds-c-button-brand-color-background: #F04923;
+    --sds-c-button-brand-color-border: #F04923;
+    --sds-c-button-brand-hover:#F04923;
+    --sds-c-button-brand-color:#F04923;
+
+}

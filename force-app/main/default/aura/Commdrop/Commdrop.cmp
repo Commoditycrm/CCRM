@@ -1,0 +1,20 @@
+<aura:component controller="Comltngclass" implements="flexipage:availableForAllPageTypes,force:appHostable">
+    <aura:attribute name="values" type="list"  />
+    <aura:attribute name="cname" type="string" />
+    <aura:attribute name="dragid" type="Integer" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+     
+    <div ondragover="{!c.cancel}" ondragenter="{!c.cancel}" ondrop="{!c.drop}">
+    <ui:inputText label="Commodity name" value="{!v.cname.Name}" />
+    </div>
+    <div  ondragover="{!c.cancel}" ondragenter="{!c.cancel}" >
+        <aura:iteration items="{!v.values}" indexVar="index" var="value">
+            <div class="row" draggable="true" ondragstart="{!c.dragstart}" data-drag-id="{!index}">
+                {!value.Name}
+            </div>
+        </aura:iteration>
+    </div>
+    <aura:registerEvent name="commname" type="c:ComEvent"/>
+     
+</aura:component>

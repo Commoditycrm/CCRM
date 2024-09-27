@@ -1,0 +1,38 @@
+<apex:page tabStyle="Account">
+
+    <apex:form >
+  <!--      <apex:pageblock >
+            <apex:pageBlockButtons >
+                <apex:CommandButton Value="Request Order" action="{!CreateReqOrder}"/>
+            </apex:pageBlockButtons>
+        <apex:pageBlockSection Title="Request Order" columns="1" id="ReqId">
+            <apex:inputtext label="Number Of Materials" value="{!noOfMat}"/>
+            <apex:inputField Value="{!Req.Terminal_Plant__c}" label="Terminal/Plant"/>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection Title="Order Details"  columns="1" >
+            <apex:pageblockTable value="{!Reqloglst}" var="order" Id="tableitem">
+                 <apex:column headervalue="Commodity">
+                      <apex:inputField Value="{!order.Commodity__c}" />
+                  </apex:column>
+                  <apex:column headervalue="Quantity">
+                      <apex:inputField Value="{!order.Quantity__c}" />
+                  </apex:column>
+                  <apex:column headervalue="UOM">
+                      <apex:inputField Value="{!order.UOM__c}" />
+                  </apex:column>
+            
+            </apex:pageblockTable>
+        
+         </apex:pageBlockSection>
+        </apex:pageblock>
+      <apex:actionfunction name="callCTRLMethod" action="{!createMultipleCommodity}" rerender="tableitem">
+          <apex:param name="noOfMat" value=""/>
+      </apex:actionfunction>
+  
+  -->
+    </apex:form>
+  
+  
+  
+</apex:page>

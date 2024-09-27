@@ -1,0 +1,328 @@
+<aura:component controller = "lightningMapController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name = "init" value="{!this}" action = "{!c.doinit}"/>
+    <aura:attribute name="interestlist" type="Bid__c[]"/>
+    <aura:attribute name="wrapperlist" type="object[]"/>
+    <aura:attribute name="Offerlist" type="Offer__c[]"/>
+    <aura:attribute name="inventorylist" type="BL_Commodity__c[]"/>
+    <aura:attribute name="menuselectlist" type="BL_Commodity__c[]"/>
+    <aura:attribute name="itemlist" type="Contract_Item__c[]"/>
+    <aura:attribute name="Accountlist" type="Account[]"/>
+    <aura:attribute name="title" type="string" default =""/>
+    <aura:attribute name="object" type="string" default =""/>
+    <aura:attribute name="selectedvalue" type="string" default =""/>
+    <aura:attribute name="Livalue" type="string" default =""/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="intmsg" type="boolean" default="false"/>
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+    <aura:attribute name="isSearch" type="boolean" default="false"/>
+    <aura:attribute name="totalitems" type="Decimal"/>
+ 	<aura:attribute name="isVisible" type="boolean" default="false"/> 
+    <aura:attribute name="SelectedAccount" type="Account"/>
+    
+    
+    <aura:attribute name="keyList" type="List"/>
+    <aura:attribute name="keyListSell" type="List"/>
+    <aura:attribute name="keyListInterest" type="List"/>
+    <aura:attribute name="keyListOffer" type="List"/>
+    
+    
+    <aura:attribute name = "CFITEMResult" type="map"/>
+    <aura:attribute name = "CFITEMSellResult" type="map"/>
+    <aura:attribute name = "InterestResult" type="map"/>
+    <aura:attribute name = "OfferResult" type="map"/>
+    
+    <aura:attribute name = "BestOffer" type="Offer__c[]"/>
+   <aura:attribute name = "BestInterest" type="Bid__c[]"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+     <aura:handler event="c:Map_For_Phillip_Select_RecordEvent" action="{!c.accountSelected}"/>
+    <aura:handler event="c:Map_for_Phillip_Open_Panel" action="{!c.openpanel}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container slds-is-fixed">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative " role="status">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div> 
+                
+            </div>
+        </div> 
+        
+    </aura:if>
+     
+    <div class="slds-grid">
+        <aura:if isTrue="{!v.isOpen}">
+        <div class="demo-only" style="display: flex; width: auto; height: 31.2rem;z-index:1;">
+         <div class="slds-split-view_container ">
+            <button class="slds-button slds-button_icon slds-split-view__toggle-button" aria-controls="split-view-id" aria-expanded="true" title="Close Split View" onclick="{!c.openspliview}">
+                
+                <span class="slds-assistive-text">Close Split View</span>
+                
+            </button>
+            
+            
+            <article aria-hidden="false" id="split-view-id" class="slds-split-view slds-grid slds-grid_vertical slds-grow">
+                <header class="slds-split-view__header">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                        <div class="slds-has-flexi-truncate">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure">
+                                    <div class="slds-icon_container slds-icon-standard-lead">
+                                        
+                                        <span class="slds-assistive-text">Map</span>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h1 class="slds-text-heading_small slds-text-color_default slds-p-right_x-small">
+                                        <button class="slds-button slds-button_reset slds-type-focus slds-truncate" aria-haspopup="true" title="">
+                                            <span class="slds-grid slds-has-flexi-truncate slds-grid_vertical-align-center">
+                                                <span class="slds-truncate" title="{!v.title}">{!v.title}</span>
+                                                
+                                            </span>
+                                        </button>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-no-flex slds-grid">
+                            <lightning:buttonMenu aura:id="LocationMenu" alternativeText="Show menu" menuAlignment="left" onselect="{! c.handleSelect }">
+                                <lightning:menuItem aura:id="menuItems" label="ALL" value="ALL" checked="true" />
+                                <lightning:menuItem aura:id="menuItems" label="Refinery" value="Refinery" checked="false" />
+                                <lightning:menuItem aura:id="menuItems" label="Rail Terminal" value="Rail Terminal" checked="false" />
+                                <lightning:menuItem aura:id="menuItems" label="Product Terminal" value="Product Terminal" checked="false" />
+                                <lightning:menuItem aura:id="menuItems" label="Interest" value="Interest" checked="false" />
+                                <lightning:menuItem aura:id="menuItems" label="Offer" value="Offer" checked="false" />
+                                <lightning:menuItem aura:id="menuItems" label="Accounts" value="Accounts" checked="false" />
+                            </lightning:buttonMenu>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <p class="slds-text-body_small slds-text-color_weak">{!v.totalitems} items</p>
+                        <div class="slds-no-flex slds-grid slds-col_bump-left">
+                            <div class="slds-button-group">
+                                <lightning:buttonIcon class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" iconName="utility:refresh" size="medium"     onclick="{! c.handleClick }" variant="bare" alternativeText="Refresh" />
+                                
+                            </div>
+                            <div class="slds-button-group">
+                                <lightning:buttonIcon class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" iconName="utility:search" size="medium"     onclick="{! c.handleSearch}" variant="bare" alternativeText="Search" />
+                            </div>
+                        </div>
+                    </div>
+
+                </header>
+                <div class="slds-grid slds-grid_vertical">
+                    <aura:if isTrue="{!v.isSearch}">
+                        <div class="slds-split-view__list-header slds-grid">
+                            <span><lightning:recordEditForm
+                                                            
+                                                            onsubmit="{!c.itemhandleSubmit}"
+                                                            onsuccess="{!c.itemhandleSuccess}"
+                                                            aura:id="itemid"
+                                                            objectApiName="CERM__Contract_Item__c">
+                                <!-- the messages component is for error messages -->
+                                <lightning:messages /> 
+                                <lightning:layout pullToBoundary="medium" multipleRows="true">
+                                    <lightning:layoutItem  flexibility="auto" padding="horizontal-medium">
+                                        <lightning:inputField  aura:id="acc" fieldName="CERM__Account__c"  onchange="{!c.onSearch}"/>
+                                        <lightning:inputField  aura:id="Loc" fieldName="CERM__Business_Location__c"  onchange="{!c.onSearch}"/>
+                                        <lightning:inputField aura:id="comm" fieldName="CERM__Commodity__c"  onchange="{!c.onSearch}"/>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                                </lightning:recordEditForm>
+                            </span>
+                        </div>
+                    </aura:if>
+                   
+                    <ul aria-multiselectable="true" class="slds-scrollable_y" role="listbox">
+                        <li class="slds-split-view__list-item" role="presentation">
+                            <!--<a href="javascript:void(0);" aria-selected="false" role="option" class="slds-split-view__list-item-action slds-grow slds-has-flexi-truncate" tabindex="0">-->
+                                <div class="slds-grid slds-wrap">
+                                    <span class="slds-truncate slds-text-body_regular slds-text-color_default" >
+                                      <aura:if isTrue = "{!v.title == 'Interest'}">
+                                        <aura:iteration items="{!v.interestlist}" var="account">
+                                            <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                        </aura:iteration>
+                                        
+                                        <aura:set attribute= "else">
+                                            <aura:if isTrue="{!v.title == 'Inventory'}">
+                                                <div class = "slds-text-heading_medium"></div><br/>
+                                                
+                                                <aura:iteration items="{!v.inventorylist}" var="account">
+                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                </aura:iteration>
+                                                
+                                                <aura:set attribute= "else">
+                                                    <aura:if isTrue="{!v.title == 'Accounts'}">
+                                                       
+                                                        <aura:iteration items="{!v.Accountlist}" var="account">
+                                                            <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                        </aura:iteration>
+                                                        <aura:set attribute= "else">
+                                                            <aura:if isTrue="{!v.title == 'Offer'}">
+                                                                <aura:iteration items="{!v.Offerlist}" var="account">
+                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                </aura:iteration>
+                                                                <aura:set attribute= "else">
+                                                                    <aura:if isTrue="{!v.title == 'Contracts'}">
+                                                                        <div class = "slds-text-heading_medium">{!v.Livalue}</div><br/>
+                                                                        <aura:iteration items="{!v.itemlist}" var="account">
+                                                                            <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                        </aura:iteration>
+                                                                        <aura:set attribute= "else">
+                                                                    		<aura:if isTrue="{!v.title == 'Refinery'}">
+                                                                                <aura:iteration items="{!v.menuselectlist}" var="account">
+                                                                            		<c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                        		</aura:iteration>
+                                                                                <aura:set attribute= "else">
+                                                                                    <aura:if isTrue="{!v.title == 'Rail Terminal'}">
+                                                                                        <aura:iteration items="{!v.menuselectlist}" var="account">
+                                                                                            <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                                        </aura:iteration>
+                                                                                        <aura:set attribute= "else">
+                                                                                            <aura:if isTrue="{!v.title == 'ALL'}">
+                                                                                                
+                                                                                                <aura:iteration items="{!v.menuselectlist}" var="account">
+                                                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}" object="inventory"/>
+                                                                                                </aura:iteration>
+                                                                                                <aura:iteration items="{!v.interestlist}" var="account">
+                                                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}" object="Interest"/>
+                                                                                                </aura:iteration>
+                                                                                                <aura:iteration items="{!v.Offerlist}" var="account">
+                                                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}" object="Offer"/>
+                                                                                                </aura:iteration>
+                                                                                                <aura:iteration items="{!v.Accountlist}" var="account">
+                                                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}" object="Accounts"/>
+                                                                                                </aura:iteration>
+                                                                                                <aura:iteration items="{!v.itemlist}" var="account">
+                                                                                                    <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}" object="Contracts"/>
+                                                                                                </aura:iteration>
+                                                                                                <aura:set attribute= "else">
+                                                                                                    <aura:if isTrue="{!v.title == 'Product Terminal'}">
+                                                                                                        <aura:iteration items="{!v.menuselectlist}" var="account">
+                                                                                                            <c:Map_For_Phillip_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                                                        </aura:iteration>
+                                                                                                    </aura:if>
+                                                                                                </aura:set>
+                                                                                            </aura:if>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                </aura:set>
+                                                                            </aura:if>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:set>
+                                        </aura:if>
+                                    </span>
+                                    <span class="slds-truncate slds-col_bump-left" title="99"></span>
+                                </div>
+                                 <aura:if isTrue = "{!v.intmsg == True}">
+                                     <div style="width:20.5em" align ="center">
+                                         <ui:message title="No Results Found" severity="info" closable="false">
+                                         </ui:message>
+                                     </div>
+                                </aura:if>
+                            <!--</a>-->
+                        </li>
+                        
+                        
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </div>
+        <aura:set attribute= "else">
+        <div class="demo-only" style="display: flex; width: auto; height: 31.2rem;z-index:1;">
+         <div class="slds-split-view_container slds-is-closed">
+            <button class="slds-button slds-button_icon slds-split-view__toggle-button" aria-controls="split-view-id" aria-expanded="true" title="Open Split View" onclick="{!c.openspliview}">
+                
+                <span class="slds-assistive-text">Open Split View</span>
+            </button>
+            
+                    </div>
+            </div>
+            </aura:set>
+        </aura:if>
+        <!-- <div style="width:20%" class="leftcol-wrap slds-col slds-size_1-of-3">
+                   <lightning:card title="{!v.selectedvalue}">
+                       <div class="slds-scrollable_y" style="height: 34em; width: 35em;">
+                           <div class="slds-card">
+             <div class="demo-only demo-only-sizing slds-grid slds-wrap">
+          <div class="slds-size_1-of-2">
+             <div class="slds-text-align_center slds-m-around_x-small">
+                                        <aura:if isTrue = "{!v.title == 'Interest'}">
+                                            <div class = "slds-text-heading_medium"> {!v.Livalue} </div><br/>
+                           <aura:iteration items="{!v.interestlist}" var="account">
+                               <c:Lightning_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                           </aura:iteration>
+                          
+                                            <aura:set attribute= "else">
+                                                <aura:if isTrue="{!v.title == 'Inventory'}">
+                                                    <div class = "slds-text-heading_medium">{!v.Livalue}  </div><br/>
+                            
+                                                    <aura:iteration items="{!v.inventorylist}" var="account">
+                                                        <c:Lightning_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                    </aura:iteration>
+                            
+                                                    <aura:set attribute= "else">
+                                                        <aura:if isTrue="{!v.title == 'Account'}">
+                                                            <div class = "slds-text-heading_medium">{!v.Livalue} </div><br/>
+                                                            <aura:iteration items="{!v.Accountlist}" var="account">
+                                                                <c:Lightning_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                            </aura:iteration>
+                                                            <aura:set attribute= "else">
+                                                                <aura:if isTrue="{!v.title == 'Offer'}">
+                                                                    <div class = "slds-text-heading_medium">{!v.Livalue}</div><br/>
+                                                                    <aura:iteration items="{!v.Offerlist}" var="account">
+                                                                        <c:Lightning_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                    </aura:iteration>
+                                                                    <aura:set attribute= "else">
+                                                                        <aura:if isTrue="{!v.title == 'Contracts'}">
+                                                                            <div class = "slds-text-heading_medium">{!v.Livalue}</div><br/>
+                                                                            <aura:iteration items="{!v.itemlist}" var="account">
+                                                                                <c:Lightning_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </aura:if>
+                                                  </aura:set>
+                                                                </aura:if>
+                                                </aura:set>
+                                                        </aura:if>
+                                              </aura:set>
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+                 
+                      </div>
+                                        <aura:if isTrue = "{!v.intmsg == True}">
+                                            <div style="width:20.5em" align ="center">
+                                                <ui:message title="No Results Found" severity="info" closable="false">
+                                                </ui:message>
+                                            </div>
+                                        </aura:if>
+                  </div>
+                           </div>
+                           </div>
+         </div>
+          </lightning:card>
+            </div> -->
+        
+        <div style="width:auto;" >
+            <c:MapResource_For_Phillip/>
+            <div class="map" id="map" aura:id="map"></div>
+        </div><!--end map-wrap-->
+        <aura:if isTrue = "{!v.isVisible}">
+            <div style="">
+                <c:Map_for_Phillip_recordDetail title = "{!v.title}" object = "{!v.object}" SelectedAccount="{!v.SelectedAccount}" CFITEMResult = "{!v.CFITEMResult}" keyList="{!v.keyList}" CFITEMSellResult = "{!v.CFITEMSellResult}" keyListSell="{!v.keyListSell}" InterestResult = "{!v.InterestResult}" keyListInterest="{!v.keyListInterest}" OfferResult = "{!v.OfferResult}" keyListOffer="{!v.keyListOffer}" bestoffers="{!v.BestOffer}" bestinterest="{!v.BestInterest}" /> 
+                
+            </div>
+        </aura:if>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Farmers Bussiness Network</label>
+    <protected>true</protected>
+    <values>
+        <field>DocuSign_Account_Id__c</field>
+        <value xsi:type="xsd:string">14c6e936-1e40-44de-9095-218177562cee</value>
+    </values>
+    <values>
+        <field>DocuSign_Integration_key__c</field>
+        <value xsi:type="xsd:string">KEYX-d9901247-6fb2-4707-8663-f8464bc7cccf</value>
+    </values>
+    <values>
+        <field>DocuSign_Password__c</field>
+        <value xsi:type="xsd:string">commodityforce</value>
+    </values>
+    <values>
+        <field>DocuSign_User_Id__c</field>
+        <value xsi:type="xsd:string">c8674023-f809-4a63-9745-a6a4067617e9</value>
+    </values>
+    <values>
+        <field>webService_Url__c</field>
+        <value xsi:type="xsd:string">https://demo.docusign.net/api/3.0/dsapi.asmx</value>
+    </values>
+</CustomMetadata>

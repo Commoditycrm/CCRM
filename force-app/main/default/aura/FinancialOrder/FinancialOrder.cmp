@@ -1,0 +1,38 @@
+<aura:component Controller="FinancialOrderClass"  implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    
+    <aura:attribute name="arggVal" type="AggregateResult[]" />
+    <aura:attribute name="commname" type="string" />
+    <aura:attribute name="renderval" type="Boolean" default="true"/>
+   <aura:handler event="c:ComEvent" action="{!c.doinit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="recordId" type="Id" />
+
+    <!--<lightning:select aura:id="inpt" name="ip" label="Enter Commodity name" onchange="{!c.doinit}">
+            <option value ="None" >None</option>
+            <option value ="Test Corn" > Test Corn</option>
+            <option value ="Soybean" >Soybean</option>
+    </lightning:select>-->
+    <aura:renderIf isTrue="{!v.renderval}">
+    <h1> Financial Order</h1>
+    
+    <table class = "slds-table slds-table--bordered">
+    	<thead>
+        	<tr>
+                <th>Instrument Type</th>
+                <th>Open Quantity</th>
+                <th>Filled Quantity</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <aura:iteration items="{!v.arggVal}" var="ag"> 
+                <tr>
+                    <td>{!ag.compName}</td>
+                    <td>{!ag.opnQty}</td>
+                    <td>{!ag.fldQty}</td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table> 
+    </aura:renderIf>
+</aura:component>

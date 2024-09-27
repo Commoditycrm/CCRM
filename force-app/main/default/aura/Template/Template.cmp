@@ -1,0 +1,16 @@
+<aura:component controller="templateCTRL" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <!-- Attributes -->
+    <aura:attribute name="selectedTemplateId" type="string"/>
+    <aura:attribute name="selectedAccountId" type="sobject"/>
+    <aura:attribute name="selectedCommodityId" type="string"/>
+    <aura:attribute name="template" type="sobject"/>
+    <aura:handler name="change" value="{!v.selectedTemplateId}" action="{!c.templateChange}"/>
+
+    
+    <!-- Lookup component -->
+ 	<c:customLookup objectAPIName="CERM__Contract_Templates__c" IconName="standard:account" selectedRecord="{!v.selectedTemplateId}" label="Template"/>
+    <c:customLookup objectAPIName="Account" IconName="standard:account" SearchKeyWord="{!v.selectedAccountId.CERM__Account__c.Name}" selectedRecord="{!v.selectedAccountId}"  label="Account"/>
+    <c:customLookup objectAPIName="CERM__Commodity__c"  IconName="standard:account" selectedRecord="{!v.selectedCommodityId}" label="Commodity"/>
+    <!-- Record view -->
+   
+</aura:component>

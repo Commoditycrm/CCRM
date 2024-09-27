@@ -1,0 +1,14 @@
+<aura:component extends="forceCommunity:navigationMenuBase">
+     <aura:attribute name="navigationLinkSetId" type="String" default="Custom_Navigation" />
+   <div  >
+       <ul class = "slds-list_horizontal" onclick="{!c.onClick}">
+           <aura:iteration items="{!v.menuItems}" var="item">
+               <li class="{!item.active ? 'slds-is-active' : ''}" style='text-align:center;'>
+                   <a href="javascript:void(0);" data-menu-item-id="{!item.id}"  class="slds-navigation-list--vertical__action navunderline  slds-text-link--reset navcontainer">
+                       {!item.label}
+                   </a>
+               </li>
+           </aura:iteration>
+       </ul>
+   </div>
+</aura:component>

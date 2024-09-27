@@ -1,0 +1,7 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" >
+    <aura:attribute name="test" type="string"/>
+    <div class="slds-form-element">
+<label class="slds-form-element__label" for="combobox-unique-id">Search</label>
+
+</div>
+</aura:component>

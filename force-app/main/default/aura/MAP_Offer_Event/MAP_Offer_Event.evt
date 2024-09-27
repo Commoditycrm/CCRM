@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="OFFERaccounts" Type="Account"/>
+    <aura:attribute name="menuvalue" Type="string"/>
+</aura:event>

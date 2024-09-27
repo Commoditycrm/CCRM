@@ -1,0 +1,183 @@
+<aura:component controller = "Price_Components" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name = "Account" type = "Account" />
+    <aura:attribute name = "commodity" type = "Commodity__c" />
+    <aura:attribute name = "Location" type = "BusinessLocation__c"/>
+    <aura:attribute name ="Plist" type="Price_Master__c[]" access="Global"/>
+    
+    <aura:attribute name="rowIndex" type="String" default = "0"/>
+     <!-- <aura:registerEvent name="DeleteRowEvt" type="c:DeleteRowEvt"/> -->
+    
+    <aura:handler name = "change" value = "{!v.Account}" action = "{!c.myAction}"/>
+    <aura:handler name = "change" value = "{!v.commodity}" action = "{!c.myAction}"/>
+    <aura:handler name = "change" value = "{!v.Location}" action = "{!c.myAction}"/> 
+    
+    <aura:handler name="DeleteRowEvt" event="c:DeleteRowEvt" action="{!c.removeDeletedRow}"/>
+    <aura:handler name="AddRowEvt" event="c:AddNewRowEvt" action="{!c.addNewRow}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card variant="Narrow" title="General Information" iconName="action:quote" >
+    <div class="slds-card__header slds-grid">
+        <c:customLookup objectAPIName="Account" IconName="standard:account" selectedRecord="{!v.Account}" label="Account" /><br/>
+        <c:customLookup objectAPIName="CERM__Commodity__c" IconName="standard:record_lookup" selectedRecord="{!v.commodity}" label="commodity" /><br/>
+        <c:customLookup objectAPIName="CERM__BusinessLocation__c" IconName="standard:address" selectedRecord="{!v.Location}" label="Location" /><br/> 
+    </div>
+        <lightning:card variant="Narrow" title="Price Comonents" iconName="custom:custom17" ></lightning:card>
+     	<button class="slds-button slds-button_brand" onclick="{!c.addNewRow}">Add More Component</button>
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col">
+                    <div class="slds-truncate">S.No</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Action">Action</div>
+                 </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Component">Component</div>
+                </th> 
+                <!-- <th scope="col">
+                    <div class="slds-truncate" title="Commodity">Commodity</div>
+                </th> -->
+                <th scope="col">
+                    <div class="slds-truncate" title="Currency">Currency</div>
+                </th>
+                
+                <th scope="col">
+                    <div class="slds-truncate" title="%" align = "center">%</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Price">Price</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Per">Per</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="PerUom">PerUom</div>
+                </th>
+               <!-- <th scope="col">
+                    <div class="slds-truncate" title="Account">Account</div>
+                </th> -->
+            </tr>
+        </thead>   
+        <tbody>
+           <!--Iterate the child Component for display Table rows 
+               with pass the List Item Index for track the Every child Component 
+               and pass each List Contact Instance -->         
+            <aura:iteration items="{!v.Plist}" var="item" indexVar="index">
+                <c:DynamicRow PriceValue ="{!item}" rowIndex="{!index}" />
+            </aura:iteration>
+        </tbody>
+    </table>
+    <br/>
+    <!--Save Button which is call Save js function on click --> 
+    <button class="slds-button slds-button_brand" onclick="{!c.Save}">Save</button>
+  <!--  <fieldset class="slds-form-element">
+                <div class="slds-form-element slds-size_1-of-1">
+                    <button  onclick = "{!c.additem}">Add More Components</button>
+                </div>
+                <legend class="slds-form-element__label slds-text-title_caps"><div class="blue slds-page-header" iconname ="standard:currency" >Price Components</div></legend>
+                <div class="slds-form-element__group">
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size_1-of-1">
+                            
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer" id ="tble1">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Action">Action</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Component">Component</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Commodity">Commodity</div>
+                                        </th>
+                                        
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Currency">Currency</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Priced Date">Priced Date</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="%">%</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Price">Price</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Per">Per</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="PerUom">PerUom</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Priced Quantity">Priced Quantity</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account">Account</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Exclud">Exclud</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.Plist}" var="s" indexVar="index">
+                                    <tr id= "item">
+                                        {!v.rowIndex + 1}
+                                        <td >
+                                            <div class="slds-truncate" ><button class="delete" iconname = "action:Remove" onclick = "{!c.removeitem}" >X</button></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ><c:customLookup objectAPIName="CERM__MD_Price_Component__c" IconName="standard:record_lookup" selectedRecord="{!s.CERM__Price_Component__c }"  /><br/>
+                                                </div>
+                                        </td>
+                                        <td ><c:customLookup objectAPIName="CERM__Commodity__c" IconName="standard:record_lookup" selectedRecord="{!v.CERM__Commodity__c}"  /><br/>
+                                            
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" > <c:customLookup objectAPIName="Account" IconName="standard:account" selectedRecord="{!s.Account}" /><br/></div>
+                                        </td>
+                                        <td >
+                                            <div class="slds-truncate" ></div>
+                                        </td>
+                                    </tr>
+                                        </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size_1-of-1">
+                            <ui:button label="Generate Items"/>
+                        </div>
+                </div>
+            </fieldset>	-->
+        
+        </lightning:card>
+    
+</aura:component>

@@ -1,0 +1,27 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="account" type="Account"/>
+    <aura:attribute name="msg" type="Boolean" default="false"/>
+    <aura:attribute name="title" type="string" default =""/>
+    <aura:attribute name="result" type="string" default ="No Results Found"/>
+    <aura:registerEvent name="accountSelected" type="c:AccountSelected"/> 
+    <!-- <aura:registerEvent name="accountsLoaded1" type="c:Accountevent"/> -->
+    <!--<ul class="slds-list_dotted">-->
+    <aura:if isTrue="{!v.title == 'Interest'}">	
+        <table >
+            <th><li ><a onclick="{!c.accountSelected}">{!v.account.Name}&nbsp;({!v.account.CERM__Commodity__r.Name})</a></li></th>
+            <!-- <td><li><a> {!v.account.CERM__Commodity__c.Name}</a></li></td> -->
+            
+        </table>
+        <aura:set attribute= "else">
+            <aura:if isTrue="{!v.title == 'Offer'}">
+                <table >
+                    <th><li><a onclick="{!c.accountSelected}">{!v.account.Name}&nbsp;({!v.account.CERM__Commodity__r.Name})</a></li></th>
+                    <!-- <td><li><a> {!v.account.CERM__Commodity__c.Name}</a></li></td> -->
+                    
+                </table>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    
+    <!-- </ul> -->
+</aura:component>

@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="ExampleName" ref="exampleComponentName" label="Label">
+		Example Description  Created on 09-11-2020 TripActions Community Page Layout  For the knowledge page
+	</aura:example>
+</aura:documentation>

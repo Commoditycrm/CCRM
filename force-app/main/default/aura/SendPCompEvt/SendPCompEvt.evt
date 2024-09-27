@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Event to display Row" >
+    <aura:attribute name="pcompmap"  type = "Map" description="Use For pcomp Row" />
+</aura:event>

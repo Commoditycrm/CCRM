@@ -1,0 +1,33 @@
+/** helloWorld.css **/
+.THIS {
+    background-color: lightblue;
+    padding-top: 10px;
+}
+
+h1.THIS {
+    font-size:12px;
+}
+
+.THIS h1{
+    font-weight: bold;
+    padding: 5px;
+}
+
+.THIS.container {
+    padding-top: 12px;
+}
+
+.THIS .reddy {
+    background-color: red;
+    padding: 10px;
+}
+
+.THIS .blue {
+    background-color: blue;
+    padding: 10px;
+}
+
+.THIS .green {
+    background-color: green;
+    padding: 10px;
+}

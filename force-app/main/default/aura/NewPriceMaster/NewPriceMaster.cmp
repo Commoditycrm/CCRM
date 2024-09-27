@@ -1,0 +1,3 @@
+<aura:component  implements="clients:availableForMailAppAppPage,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <lightning:button  label="Price Master" onclick="{!c.createRecord}"/>
+</aura:component>

@@ -1,0 +1,362 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute Name="template" type="object"  access="public" />
+    <aura:attribute Name="conandConItem" type="conandConItemWrapper"/>
+    <aura:attribute Name="Template1" type="Contract_Templates__c"  />
+    <aura:attribute name="Contract" type="Contract__c"  default="{'sobjectType': 'Contract__c',
+                                                                                'CERM__Commodity__c': '',
+                                                                                'CERM__Currency__c': '',
+                                                                                'CERM__Logistics_Coordinator__c': '',
+                                                                                'CERM__Account__c': '',
+                                                                       			'CERM__Contract_Template__c':'',
+                                                                       			'CERM__Dispute_Resolution__c':'',
+                                                                       			'CERM__Trader__c':'',
+                                                                       			'CERM__Price_Type__c':'',
+                                                                       			'CERM__Type__c':''}" />
+    <aura:attribute name="pmaster" type="Price_Master__c"  default="{'sobjectType': 'Price_Master__c',
+                                                                                'CERM__Price_Component_Name__c': '',
+                                                                                'CERM__Commodity__c': '',
+                                                                                'CERM__Currency__c': '',
+                                                                                'CERM__Percent__c': '',
+                                                                                'CERM__Price__c': '',
+                                                                                'CERM__Per__c': '',
+                                                                                'CERM__UoM_Name__c': '',
+                                                                                'CERM__Account__c': ''}" />
+    <aura:attribute name="citem" type="Contract_Item__c"  default="{'sobjectType': 'Contract_Item__c',
+                                                                                'CERM__Business_Location__c': '',
+                                                                                'CERM__Commodity__c': '',
+                                                                                'CERM__Contract_Currency__c': '',
+                                                                                'CERM__Percentage__c': '',
+                                                                                'CERM__Price__c': '',
+                                                                                'CERM__Quantity__c': '',
+                                                                                'CERM__UoM__c': '',
+                                                                                'CERM__Account__c': ''}" />
+    <aura:attribute name="Con" type="Contract__c"/>
+     <aura:attribute name = "PriceMasterList" type = "Price_Master__c[]"/>
+    <aura:attribute name="rowIndex" type="String" default = "0"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    
+    <h3 class="slds-section-title--divider" >General Information</h3>
+              {!v.Contract.CERM__Account__c}
+        <div class="slds-grid slds-grid_vertical-align-start slds-p-left_none"> 
+            
+            <div class="slds-col" style="width:25em">
+                <table>
+                    <div class="slds-grid slds-wrap " >
+                         <div class="slds-col slds-size_10-of-12">
+                        <tr>
+                            <th><label class="slds-form-element__label" >Select Type</label></th>
+                            <td><force:inputField  value="{!v.Contract.CERM__Type__c}"/></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <th><force:inputField  value="{!v.Contract.CERM__Price_Type__c}"/><br/></th>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >Account</label></th>
+                            <td><force:inputField  aura:id="lookup" value="{!v.Contract.CERM__Account__c}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >Commodity</label></th>
+                            <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Commodity__c}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >Quantity</label></th>
+                            <td> <force:inputField   value="{!v.citem.CERM__Quantity__c}" /></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <th><force:inputField  aura:id="lookup" value="{!v.citem.CERM__UoM__c}"/></th>
+                        </tr>
+                        <tr>
+                            <th> <label class="slds-form-element__label" >Dispute Resolution</label></th>
+                            <td> <force:inputField   value="{!v.Contract.CERM__Dispute_Resolution__c}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th> <label class="slds-form-element__label" >Trader</label></th>
+                            <td><force:inputField  aura:id="lookup" value="{!v.Contract.CERM__Trader__c}"/><br/></td>
+                        </tr>
+                    </div>
+                    </div>
+                </table>
+            </div>
+            <div class="slds-col" style="width:20em ">
+                <table>
+                    <div class="slds-grid slds-wrap " >
+                        <div class="slds-col slds-size_10-of-12">
+                        <tr>
+                            <th> <label class="slds-form-element__label" >Contract Currency</label> </th>
+                            <td> <force:inputField  aura:id="lookup" value="{!v.citem.CERM__Contract_Currency__c}"/><br/></td>
+                        </tr>
+                        
+                        <tr>
+                            <th valign="bottom"><label class="slds-form-element__label" >Terminal/Plant</label></th>
+                            <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Business_Location__c}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >Grade</label></th>
+                            <td> <force:inputField  aura:id="lookup" value="{!v.citem.CERM__Grade__c	}"/><br/></td>
+                        </tr>
+                        
+                        <tr>
+                            <th> <label class="slds-form-element__label" >Future Months</label></th>
+                            <td><force:inputField   value="{!v.citem.CERM__FuturesMonth__c}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >Price Market Area</label></th>
+                            <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Market_Region__c	}"/><br/></td>
+                        </tr>
+                        <tr>
+                            <th><label class="slds-form-element__label" >External Reference</label></th>
+                            <td> <force:inputField  value="{!v.citem.CERM__External_Reference__c}"/><br/></td>
+                        </tr>
+                    </div>
+                    </div>
+                </table>
+            </div>
+            
+            <div class="slds-col" style="width:20em"> 
+                <table>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_10-of-12">
+                            <tr>
+                                <th><label class="slds-form-element__label" >Split By</label></th>
+                                <td> <force:inputField   value="{!v.citem.CERM__Split_By__c}"/><br/></td>
+                            </tr>
+                            <tr style="width:20em">
+                                <th><label class="slds-form-element__label" >Delivery Period</label></th>
+                                <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__DeliveryStartDate__c}"/><br/></td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <th><force:inputField  aura:id="lookup" value="{!v.citem.CERM__DeliveryEndDate__c}"/><br/></th>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Crop Year</label></th>
+                                <td><force:inputField   value="{!v.citem.CERM__CropYear__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Marketing Pool</label></th>
+                                <td><force:inputField  aura:id="lookup" value="{!v.Contract.CERM__Marketing_Pool__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Logistics Coordinator</label></th>
+                                <td><force:inputField  aura:id="lookup" value="{!v.Contract.CERM__Logistics_Coordinator__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th valign = "center"><label class="slds-form-element__label" >Additional Text</label></th>
+                                <td ><force:inputField  aura:id="lookup" value="{!v.Contract.CERM__Additional_Instructions__c}"/><br/></td>
+                            </tr>
+                        </div>
+                    </div>
+                </table>
+            </div>
+            
+        </div>
+       
+          <h3 class="slds-section-title--divider" >Terms</h3>
+                
+        <div class="slds-grid slds-grid_vertical-align-start slds-p-left_none"> 
+            
+            <div class="slds-col" style="width:30em"> 
+                <table>
+                    <div class="slds-grid slds-wrap " >
+                        <div class="slds-col slds-grid slds-size_1-of-2">
+                            <div class="slds-col slds-size_5-of-12" style="width:10em">
+                                <tr>
+                                    <th><label class="slds-form-element__label" >Incoterm</label></th>
+                                    <td><force:inputField  value="{!v.citem.CERM__IncoTerm__c}"/></td>
+                                </tr>
+                                
+                            </div>
+                            <div><br/></div>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="slds-col slds-size_1-of-2" style="width:10em">
+                                <tr>
+                                    <th><label class="slds-form-element__label" >Additonal term</label></th>
+                                    <td><force:inputField  value="{!v.citem.CERM__IncoTerm2__c}"/></td>
+                                </tr>
+                            </div>
+                        </div>
+                    </div><br/>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_10-of-12">
+                            <tr>
+                                <th><label class="slds-form-element__label" >Governing Weights</label></th>
+                                <td><force:inputField  value="{!v.citem.CERM__Governing_Weights__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Tolerance</label></th>
+                                <td><force:inputField  value="{!v.citem.CERM__ToleranceType__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Number of Loads</label></th>
+                                <td><force:inputField  value="{!v.citem.CERM__FCL__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Bag UoM</label></th>
+                                <td><force:inputField  value="{!v.citem.CERM__Bag_UoM__c}"/><br/></td>
+                            </tr>
+                        </div>
+                    </div>
+                </table>
+            </div>
+            <div class="slds-col" style="width:20em" >
+                <tr>
+                    <th><label class="slds-form-element__label" >Payment Term</label></th>
+                    <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__PaymentTerm__c}"/><br/></td>
+                </tr>
+                <tr>
+                    <th><label class="slds-form-element__label" >Governing Grades</label></th>
+                    <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__GoverningGrades__c}"/><br/></td>
+                </tr>
+                <tr>
+                    <th><label class="slds-form-element__label" >Under/Over Limit</label></th>
+                    <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__ToleranceLowLimit__c	}"/><br/></td>
+                </tr>
+                <tr>
+                    <th><label class="slds-form-element__label" ># Bags/Tote	</label></th>
+                    <td><force:inputField   value="{!v.citem.CERM__Bags__c}"/><br/></td>
+                </tr>
+                <tr>
+                    <th><label class="slds-form-element__label" >Packaging Material Weight</label></th>
+                    <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Packaging_Material_Weight__c	}"/><br/></td>
+                </tr>
+            </div>
+            <div class="slds-col" ></div>
+            <div class="slds-col" style="width:20em">
+                <table>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_10-of-12">
+                            <tr>
+                                <th><label class="slds-form-element__label" >Title Transfer</label></th>
+                                <td><force:inputField   value="{!v.citem.CERM__Title_Transfer__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Governing Terms	</label></th>
+                                <td><force:inputField   value="{!v.citem.CERM__GoverningTerms__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Weight Per Bag</label></th>
+                                <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Weight_Per_Bag__c}"/><br/></td>
+                            </tr>
+                            <tr>
+                                <th><label class="slds-form-element__label" >Discount Schedule</label></th>
+                                <td><force:inputField  aura:id="lookup" value="{!v.citem.CERM__Discount_Schedule__c}"/><br/></td>
+                            </tr>                                                                                   
+                        </div>
+                    </div>
+                </table>
+            </div>
+            
+        </div>
+    
+       <h3 class="slds-section-title--divider" >Price Components</h3>
+      
+       <button class="slds-button slds-button_brand" onclick="{!c.addNewRow}">Add More Component</button>
+       <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+            <thead>
+                <tr class="slds-text-title_caps">
+                   <!-- <th scope="col">
+                        <div class="slds-truncate" >S.No</div>
+                    </th> -->
+                    <th scope="col" width="2%">
+                        <div class="slds-truncate" title="Action" align = "center">Delete</div>
+                     </th>
+                    <th scope="col" width="20%">
+                        <div class="slds-truncate" title="Component"  align = "center">Component</div>
+                    </th> 
+                     <th scope="col" width="15%">
+                        <div class="slds-truncate" title="Commodity"  align = "center">Commodity</div>
+                    </th> 
+                   	<th scope="col" width="10%">
+                        <div class="slds-truncate" title="PriceDate"  align = "center">Priced Date</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="%"  align = "center">%</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Price"  align = "center">Price</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Per"  align = "center">Per</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="PerUOM"  align = "center">Per UoM</div>
+                    </th>
+                    <th scope="col"  width="5%">
+                        <div class="slds-truncate" title="Priced Quantity">Priced Quantity</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Account">Account</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Exclud" align = "center">Exclud</div>
+                    </th>
+                </tr>
+            </thead>   
+            <tbody>
+               <!--Iterate price master list -->         
+                <aura:iteration items="{!v.PriceMasterList}" var="item" indexVar="index">
+                    <c:CreateContract_Pricecomponent PriceValue ="{!item}" rowIndex="{!index}" /> 
+                    
+                </aura:iteration>
+                
+            </tbody>
+        </table><br/>
+        <!--Save Button which is call Save js function on click --> 
+        <button class="slds-button slds-button_brand" onclick="{!c.GenerateItems}">Generate Items</button>
+        <div><br/></div>
+        
+        
+        <h3 class="slds-section-title--divider" >Contract Item</h3>
+        
+       <table class="slds-table slds-table_bordered slds-table_cell-buffer" width="100%"> 
+            <thead>
+                <tr class="slds-text-title_caps" width="100%">
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Account" align = "center">Account</div>
+                     </th>
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Loaction"  align = "center">Terminal/Plant</div>
+                    </th> 
+                      <th scope="col"  >
+                        <div class="slds-truncate" title="Commodity"  align = "center">Commodity</div>
+                    </th> 
+                    <th scope="col"  >
+                        <div class="slds-truncate" title="Quantity"  align = "center">Quantity</div>
+                    </th>
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Unit of Measure"  align = "center">UoM</div>
+                    </th>
+                    <th scope="col"  >
+                        <div class="slds-truncate" title="Delivery Start Date"  align = "center">Delivery Start Date</div>
+                    </th>
+                    <th scope="col"  >
+                        <div class="slds-truncate" title="Delivery End Date"  align = "center">Delivery End Date</div>
+                    </th>
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Future Month"  align = "center">Futures Month</div>
+                    </th>
+                    <th scope="col"  >
+                        <div class="slds-truncate" title="Governing Grades">Governing Grades</div>
+                    </th>
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Governing Terms">Governing Terms</div>
+                    </th>
+                     <th scope="col"  >
+                        <div class="slds-truncate" title="Governing Weights" align = "Governing Weights">Governing Weights</div>
+                    </th>
+                </tr>
+            </thead>   
+            <tbody>
+               <!--Iterate price master list -->         
+                <aura:iteration items="{!v.PriceMasterList}" var="item" indexVar="index">
+                    <!--<c:CreateContract_Pricecomponent PriceValue ="{!item}" rowIndex="{!index}" /> -->
+                    
+                </aura:iteration>
+                
+            </tbody>
+        </table><br/>
+                
+        <div><br/></div>
+        
+        <div align="center" >
+  			<button class="slds-button slds-button_inverse">save</button>
+           <button class="slds-button slds-button_inverse">save and send contract</button>
+	   </div>
+
+</aura:component>

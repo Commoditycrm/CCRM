@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Event template" >
+	<aura:attribute name="isShowSpinner" type="Boolean" description="Use to show and hide spinner" />
+</aura:event>

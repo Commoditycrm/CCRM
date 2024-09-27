@@ -1,0 +1,6 @@
+<aura:component >
+	
+   
+    <a><img src="{!$Resource.BusinessLocation}" onclick = "{!c.disp}" title="image" class="img"/></a>
+ 
+</aura:component>

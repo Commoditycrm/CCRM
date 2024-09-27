@@ -1,0 +1,30 @@
+<aura:component implements="forceCommunity:themeLayout"  >
+    
+    <div style = "background-color:#0094D1;">
+    <div class="slds-grid slds-grid--align-left " style="margin-left:14.5%;margin-right:10%;">
+           
+         <div class="slds-col" style="margin-top:0.1%;margin-bottom:0.1%">   
+                      <div class="slds-grid slds-gutters" >
+                           <div class="slds-col"  style="align:left;"  >
+                <!--    <img src="{!$Resource.tripactionslogo}"  alternativeText="cmpylogo" style=" max-width: 300px;width:190px;height:66px; margin: 0 30px 0 0;" /> -->
+                    </div>
+                           <div class="slds-col  slds-size_2-of-3 margtop" style="align:left;margin-top:1%;">
+                    <c:verticalNav></c:verticalNav>
+                </div>
+                  <div class="slds-col buttondiv" > 
+                        
+                      </div>  
+                     
+           </div>   
+        </div>
+    </div>
+    </div>
+  <!--   <c:pubsubPublisher></c:pubsubPublisher> -->
+      <div style='margin-top:320px;'></div>
+    <div class="slds-grid" style="margin-left:11.5%;">
+         <div class="slds-col">
+                   {!v.body}
+    </div>
+    </div> 
+   
+    </aura:component>

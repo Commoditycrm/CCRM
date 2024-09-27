@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    
+    <aura:attribute name="panelvalue" Type="Boolean"/>
+</aura:event>

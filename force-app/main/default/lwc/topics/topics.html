@@ -1,0 +1,9 @@
+<template>
+ <div style="background-color: white;">
+    <h1> TOPICS( {topiccount} ) </h1>
+
+<lightning-input type="text" value= {topicadd} name="tpcName"  onkeypress={addtopic} ></lightning-input>
+
+   <lightning-pill-container items={items} onclick={handleClick}></lightning-pill-container>  
+  </div>
+</template>

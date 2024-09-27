@@ -1,0 +1,29 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	  
+     <aura:attribute name="search" type="Aura.Component[]"/>
+    <aura:attribute name="sidebarFooter" type="Aura.Component[]"/>
+     <aura:attribute name="signin" type="Aura.Component[]"/>
+    
+   <div style = "background-color:#0094D1;">
+    <div class="slds-grid slds-grid--align-left " style="margin-left:10%;margin-right:10%;height:80px;">
+           
+         <div class="slds-col" style="margin-top:0.1%;margin-bottom:0.1%">   
+                      <div class="slds-grid slds-gutters" >
+                           <div class="slds-col"  style="align:left;"  >
+                    <img src="{!$Resource.tripactionslogo}"  alternativeText="cmpylogo" style=" max-width: 300px;width:190px;height:66px; margin: 0 30px 0 0;" />
+                    </div>
+                           <div class="slds-col  slds-size_2-of-3 margtop" style="align:left;margin-top:1%;margin-left:1%;width:60%;">
+                    <c:verticalNav></c:verticalNav>
+                </div>
+                        
+                       <div class="slds-col buttondiv" > 
+                         <lightning:button  class="buttoncls btnhover"  label="Sign In" onclick="{!c.clickme1}"  />
+                          <lightning:button class = "buttoncls btnhover" label="Register" onclick="{!c.clickmereg1}"  />  
+                      </div>
+           </div>   
+        </div>
+    </div>
+    </div>
+    
+    <!--<iframe src="{!'https://commodityforce-developer-edition.na71.visual.force.com/custdemo/apex/CommunitiesLogin'}" width="100%" height="500px;" frameBorder="0"/>-->
+</aura:component>

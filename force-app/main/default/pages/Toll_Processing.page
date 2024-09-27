@@ -1,0 +1,466 @@
+<apex:page showHeader="true" sidebar="false" controller="MixOrder_Controller" title="Toll Processing" id="myPage">    
+    
+    <script src="{!$Resource.staticresource1}">
+    </script> 
+    <style>
+        .yellow {
+            background-color: yellow;
+        } 
+        .green {
+            background-color: green;
+        } 
+        .red {
+            background-color: red;
+        } 
+        
+    </style>
+    
+    <script>
+        var $j = jQuery.noConflict();  
+        
+        $j(document).ready(function(){
+              collapsefn();  
+        });    
+        
+        
+        function collapsefn(){
+            twistSection(document.getElementById('{!$Component.myPage.my_form.myPageBlock.pgbs1}').getElementsByTagName('img')[0]);
+            collapsefinal();
+        }
+        
+        function collapsefinal(){
+            twistSection(document.getElementById('{!$Component.myPage.my_form.myPageBlock.cn}').getElementsByTagName('img')[0]);
+        }
+        
+        var timeout = null;
+        function updateQuantity(){
+            
+            clearTimeout(timeout);
+            
+            timeout = setTimeout(function(){ 
+                contractRefresh(); 
+            }, 900);
+        }
+        
+        function hideLocation(){
+            
+            $j('[id$=Locheader]').hide();
+            $j('[id$=Loc]').each(function(){
+                $j(this).hide();
+            });
+        }
+    </script>
+    
+    <apex:form id="my_form" >     
+        <apex:actionFunction name="contractRefresh" action="{!splitContractnRefresh}" status="load"  reRender="cn, subItemId" oncomplete="collapsefinal();" />
+                                   
+        <apex:outputPanel id="pdfID">
+            <script type="text/javascript">                        
+                function openSendPDF() {
+                    if('{!successmessage}' == 'true') {
+                        window.open("/apex/sendContract?id="+'{!contractID}' , "_blank", "toolbar=No, scrollbars=No, resizable=No, width=400, height=400, left = 400, top = 50");
+                    }
+                }
+            </script>
+        </apex:outputPanel>
+
+        <apex:pageMessages escape="false" id="pm"/>
+         
+        <apex:actionFunction name="callRenderComponent" action="{!renderComponent}" status="loading" reRender="pgbs2, myOPPPP, pricefromData"/>
+        <center>
+         <apex:commandButton value="Save" action="{!saveContract}" status="loading" reRender="my_form" oncomplete="collapsefn();"/> &nbsp;
+         <apex:commandButton value="Save & Send Contract" action="{!saveContract}" status="loading" reRender="my_form" id="sendContract" oncomplete="openSendPDF();collapsefn();"/>
+        </center><br/>
+        <apex:pageBlock title="Create Production Order" tabStyle="Account" id="myPageBlock">
+            <apex:pageBlockButtons id="pgbb" location="top" title="Save">
+                      
+                <apex:actionStatus startText=" (In Progress...)" id="loading">
+                    <apex:facet name="start">
+                        <table border="0" width="50%" height="100%">
+                            <tr>
+                                <td align="center"><img src="/img/loading.gif" alt="Loading graphic" style="float:left;"/></td>
+                            </tr>
+                        </table>
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockButtons>
+            Select a Template 
+            <apex:inputField value="{!con.Contract_Template__c}" id="details">
+                <apex:actionSupport event="onchange" action="{!copyTemplateValues}" oncomplete="collapsefn();" rerender="my_form, myJS, subItemId, addSubItemId, removeSubItemId, pm" status="loading"/>
+            </apex:inputField>
+            <apex:pageBlockSection id="pgbs" title="General Information" collapsible="true" columns="3">
+            
+                <table id="myHTMLTable">
+                    <tr id="myRow">
+                        <apex:inputField value="{!con.BuySell__c}">
+                            <apex:actionSupport event="onchange" action="{!splitContractnRefresh}" rerender="my_list, pgbs2, cn, pm, subItemId, addSubItemId, removeSubItemId, adp" status="loading"/>
+                        </apex:inputField>
+                        <apex:pageBlockSectionItem labelTitle="Buy/Sell" dataTitle="Buy/Sell" id="myPagesectionId">
+                            <apex:inputField value="{!con.Price_Type__c}" onchange="showfield(this, false);" style="margin-left:-50px;" id="priceTypeId"/>
+                        </apex:pageBlockSectionItem>
+                    </tr>
+                </table>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Contract Currency"/>
+                    <apex:inputField value="{!con.Contract_Currency__c}" label="Contract Currency">
+                    <!--    <apex:actionSupport action="{!renderComponent}" status="loadingWheel" event="onchange" reRender="pgbs2">
+                        </apex:actionSupport>    -->
+                    </apex:inputField>
+                </apex:pageBlockSectionItem>
+                
+                <apex:inputField value="{!conitem.Split_By__c}" id="splitById"/>
+                
+                <apex:inputField value="{!con.Account__c}" id="dynFieldName">
+                    <script>
+                        document.getElementById('{!$Component.dynFieldName}_lkid').value = '{!listOfTemp[0].CERM__Account__c}';
+                        document.getElementById('{!$Component.dynFieldName}').value = '{!listOfTemp[0].CERM__Account__r.name}';
+                    </script>
+                </apex:inputfield>
+                
+                <apex:inputField value="{!conitem.Business_Location__c}" id="bizLocationName" label="Terminal/Plant">
+                    <script>
+                         document.getElementById('{!$Component.bizLocationName}_lkid').value = '{!listOfTemp[0].CERM__MD_Business_Location__c}';
+                         document.getElementById('{!$Component.bizLocationName}').value = '{!listOfTemp[0].CERM__MD_Business_Location__r.name}';
+                     </script>
+                     
+                     <apex:actionSupport event="onchange" action="{!updateItemLocation}" rerender="subItemId" status="loading"/>
+                </apex:inputfield>
+             
+                
+                 <table>
+                    <tr>
+                        
+                        <apex:inputField value="{!conitem.Bagged__c}" label="Bagged" /> 
+                        <apex:pageBlockSectionItem labelTitle="Bagged" dataTitle="Bagged" >
+                           <apex:inputField value="{!conitem.Each_Bag__c}" />
+                           <apex:outputText value="Pounds" />
+                        </apex:pageBlockSectionItem>
+                    </tr>
+                </table>
+                 
+                <apex:inputField value="{!conitem.Commodity__c}" id="commodityName">
+                    <apex:actionSupport event="onchange" action="{!renderComponent}" rerender="my_list, pgbs2, cn, pm, subItemId, addSubItemId, removeSubItemId" status="loading" oncomplete=""/> 
+                    <script>
+                         document.getElementById('{!$Component.commodityName}_lkid').value = '{!listOfTemp[0].CERM__MD_Hedgeable_Commodity__c}';
+                         document.getElementById('{!$Component.commodityName}').value = '{!listOfTemp[0].CERM__MD_Hedgeable_Commodity__r.name}';
+                     </script>
+                </apex:inputField>
+                
+                <apex:inputField value="{!conitem.CropYear__c}"/> 
+              
+                <table>
+                    <tr>
+                        <apex:inputField value="{!conitem.Quantity__c}" label="Contract Quantity" id="quantity" onkeydown="updateQuantity();"/>
+                        <apex:pageBlockSectionItem >
+                            <apex:inputField value="{!conitem.UoM__c}" id="qtyUOM" style="width:100px">
+                                <apex:actionSupport action="{!bushelRender}" status="loading" event="onchange" reRender="pgbs2"/>
+                                <script>
+                                    document.getElementById('{!$Component.qtyUOM}_lkid').value = '{!listOfTemp[0].CERM__UoM__c}';
+                                    document.getElementById('{!$Component.qtyUOM}').value = '{!listOfTemp[0].CERM__UoM__r.name}';
+                                </script>
+                            </apex:inputField>
+                        </apex:pageBlockSectionItem>
+                    </tr>
+                </table>   
+                <apex:inputField value="{!con.Logistics_Coordinator__c}" id="logCorName">
+                    <script>
+                        document.getElementById('{!$Component.logCorName}_lkid').value = '{!listOfTemp[0].CERM__Logistics_Coordinator__c}';
+                        document.getElementById('{!$Component.logCorName}').value = '{!listOfTemp[0].CERM__Logistics_Coordinator__r.name}';
+                    </script>
+                </apex:inputField> 
+                <apex:inputField value="{!con.External_Reference__c}"/>        
+              
+                </apex:pageBlockSection>
+
+                <apex:pageBlockSection collapsible="true" columns="3" id="pgbs1" title="Terms"> 
+                    <table>
+                        <tr>
+                            <apex:inputField value="{!conitem.IncoTerm__c}" style="width:100px;"/>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputField value="{!conitem.IncoTerm2__c}" style="margin-left:-50px;"/>
+                            </apex:pageBlockSectionItem>
+                        </tr>
+                        </table>
+                       
+                        <apex:inputField value="{!conitem.Delivery_Pickup_Time__c}"/>  
+                        <apex:inputField value="{!conitem.PaymentTerm__c}"/>    
+                        <apex:inputField value="{!conitem.Transport_Type__c}"/>                       
+                        <apex:inputField value="{!conitem.Transport_Compartments__c}"/> 
+                        <apex:inputHidden id="hdd2"/> 
+                                        
+                        <apex:inputField value="{!conitem.Mixer__c}"/>
+                        <apex:inputField value="{!conitem.OverheadBin__c}"/>
+                        <apex:inputField value="{!conitem.Number_of_Batches__c}"/>
+                        
+                        <apex:inputField value="{!con.Delivery_Instructions__c}"/>
+                        <apex:inputField value="{!con.Mix_Instructions__c}"/>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection >
+            <center>
+                <apex:outputPanel id="ld">
+                    <apex:actionStatus id="load">
+                        <apex:facet name="start">
+                            <table border="0" width="50%" height="100%">
+                                <tr>
+                                    <td align="center"><img src="/img/loading.gif" alt="Loading graphic"/></td>
+                                </tr>
+                            </table>
+                        </apex:facet>
+                    </apex:actionStatus>
+                  </apex:outputPanel>
+            </center>
+        </apex:pageBlockSection>
+                
+        <apex:commandButton value="Update Quantity" title="Split" id="bt" action="{!splitContractnRefresh}" status="load" reRender="cn, pm, subItemId, addSubItemId, pgbs2, adp"/>
+        <apex:pageBlockSection title="Final Product" id="cn" collapsible="true">
+            <apex:outputPanel layout="block" style="overflow:auto; width:1300px;">
+                    <apex:pageBlockTable value="{!conMap}" var="cm" id="pbt" styleClass="table-responsive">
+                        <!--
+                        <apex:variable value="{!0}" var="countContractItem"/>
+                        <apex:column >
+                            <apex:CommandLink value="del" immediate="true" action="{!removeContractItem}" status="load" reRender="cn" id="removeCtItemlink">
+                                <apex:param name="indexOfContractItem" value="{!countContractItem}"/>
+                            </apex:CommandLink>
+                            <apex:variable var="countContractItem" value="{!countContractItem+1}"/> 
+                        </apex:column>    -->
+                   
+                        <apex:column headerValue="Account">
+                            <apex:inputField value="{!conMap[cm].CERM__Account__c}" id="accid" style="width:120px"/>
+                        </apex:column>
+                        <apex:column headerValue="Terminal/Plant">
+                            <apex:inputField value="{!conMap[cm].CERM__Business_Location__c}" id="astid" style="width:120px"/>
+                        </apex:column>
+                        <apex:column headerValue="Commodity">
+                            <apex:inputField value="{!conMap[cm].CERM__Commodity__c}" id="prid" style="width:120px"/>
+                        </apex:column>
+                        <apex:column headerValue="Quantity">
+                            <div class="col-sm-1">
+                                <apex:inputField value="{!conMap[cm].CERM__Quantity__c}" id="quid" style="width:120px"/>
+                            </div>
+                        </apex:column>
+                        <apex:column headerValue="Unit of Measure">
+                            <div class="col-sm-1">
+                                <apex:inputField value="{!conMap[cm].CERM__UoM__c}" id="uid" style="width:80px"/>
+                            </div>
+                        </apex:column>
+                        <apex:column headerValue="Delivery Start Date">
+                            <apex:inputField value="{!conMap[cm].CERM__DeliveryStartDate__c}" id="startid"/>
+                        </apex:column>
+                        <apex:column headerValue="Delivery End Date">
+                            <apex:inputField value="{!conMap[cm].CERM__DeliveryEndDate__c}" id="endid"/>
+                        </apex:column>
+                        <apex:column headerValue="Futures Month">
+                            <apex:inputField value="{!conMap[cm].CERM__FuturesMonth__c}" id="fugid" style="width:120px"/>
+                        </apex:column>
+                        <apex:column headerValue="Governing Grades">
+                            <apex:inputField value="{!conMap[cm].CERM__GoverningGrades__c}" id="ggid" style="width:80px"/>
+                        </apex:column>
+                        <apex:column headerValue="Governing Terms">
+                            <apex:inputField value="{!conMap[cm].CERM__GoverningTerms__c}" id="gtid"/>
+                        </apex:column>
+                        <apex:column headerValue="Governing Weights">
+                            <apex:inputField value="{!conMap[cm].CERM__Governing_Weights__c}" id="gwid" style="width:80px"/>
+                        </apex:column>
+                   </apex:pageBlockTable>
+                   
+                   <apex:commandButton action="{!addContractItem}" status="load" id="addContractItemId" title="Add More Contract Item" value="+" reRender="cn"/> &nbsp;
+            </apex:outputPanel>
+        </apex:pageBlockSection>
+            <apex:pageBlockSection title="Commoditys in Production Process" id="subItemId" collapsible="true">
+                <apex:outputPanel layout="block" style="overflow:auto; width:1300px;">
+                       <apex:pageBlockTable value="{!listOfSubItemToDisplay}" var="ingrdient" id="myPBT" styleClass="table-responsive">                      
+                            
+                            <apex:variable value="{!0}" var="countSubItem"/>
+                            <apex:column >
+                                <apex:CommandLink value="Del" immediate="true" action="{!removeSubItem}" status="loadPcp" reRender="subItemId" id="removeSubItemlink" style="color:blue;">
+                                    <apex:param name="indexOfSubItem" value="{!countSubItem}"/>
+                                </apex:CommandLink>
+                                <apex:variable var="countSubItem" value="{!countSubItem+1}"/> 
+                            </apex:column>
+                            
+                            <apex:column headerValue="Processed Commodity">
+                                <apex:inputField value="{!ingrdient.Commodity_Ingredient__c}" id="IngredientComm" style="width:120px"/>
+                             </apex:column> 
+                             <apex:column headerValue="Input/Output">
+                                <apex:inputField value="{!ingrdient.Input_Output__c}" id="processId" style="width:80px"/>
+                            </apex:column>                              
+                            <apex:column headerValue="Quantity Factor">
+                                <apex:inputField value="{!ingrdient.Qty_Factor__c}" id="qtyFactorId" style="width:80px"/>
+                            </apex:column>
+                            <apex:column headerValue="Quantity" styleClass="{!if(ingrdient.Qty_Status__c == 'have_in_Storage', 'yellow', if(ingrdient.Qty_Status__c == 'have_in_Inventory', 'green', if(ingrdient.Qty_Status__c == 'Not_in_Inventory', 'red', 'normal')))}">
+                                <apex:inputField value="{!ingrdient.Quantity__c}" id="qtyId" style="width:90px"/>
+                            </apex:column>
+                            <apex:column headerValue="UoM">
+                                <apex:inputField value="{!ingrdient.UoM__c}" id="unitOfMeasure" style="width:60px"/>
+                            </apex:column>
+                            
+                            <apex:column headerValue="Sourcing Qty">
+                                <apex:outputField value="{!ingrdient.Alternate_Quantity__c}" rendered="{!ingrdient.Alternate_UoM__c != null}" id="AqtyId" style="width:90px"/>
+                            </apex:column>
+                            <apex:column headerValue="UoM">
+                                <apex:outputField value="{!ingrdient.Alternate_UoM__c}" rendered="{!ingrdient.Alternate_UoM__c != null}" id="AunitOfMeasure" style="width:40px"/>
+                            </apex:column>  
+                            <apex:column headerValue="Sourcing">
+                                <apex:inputField value="{!ingrdient.Commodity_Sourcing__c}" id="Sourcing" style="width:90px"/>
+                            </apex:column>
+                            <apex:column headerValue="Bin">
+                                <apex:inputField value="{!ingrdient.Sub_BizLocation__c}" id="Bin" style="width:40px"/>
+                            </apex:column>
+                            
+                            <apex:column id="Loc" headerValue="Location">
+                                <apex:inputField value="{!ingrdient.Business_Location__c}"  style="width:40px" />
+                            </apex:column> 
+                                 
+                             <apex:column headerValue="Lot#">
+                                <apex:inputField value="{!ingrdient.Lot_No__c}" id="LotNo" style="width:90px"/>
+                            </apex:column>                            
+                           <!-- <apex:column headerValue="Prescription" id="prescrpCol"  >
+                                <apex:outputField value="{!ingrdient.Prescription__c}" id="PrescriptionReadOnly" style="width:60px" rendered="{!!ingrdient.NP__c}"/>
+                                <apex:inputField value="{!ingrdient.Prescription__c}" id="PrescriptionInputMode" style="width:60px" rendered="{!ingrdient.NP__c}"/>
+                            </apex:column> -->
+                        </apex:pageBlockTable>
+                        
+                        <script>hideLocation()</script>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+            <apex:commandButton action="{!addSubItem}" status="loadPcp" id="addSubItemId" title="Add More Sub Item" value="+" reRender="subItemId"/> &nbsp;
+            
+            <apex:pageBlockSection >
+                <center>
+                    <apex:outputPanel id="ld">
+                        <apex:actionStatus id="loadPcp">
+                            <apex:facet name="start">
+                                <table border="0" width="50%" height="100%">
+                                    <tr>
+                                        <td align="center"><img src="/img/loading.gif" alt="Loading graphic"/></td>
+                                    </tr>
+                                </table>
+                            </apex:facet>
+                        </apex:actionStatus>
+                      </apex:outputPanel>
+                </center>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection collapsible="true" columns="1" id="pgbs2" title="Price/Charge/Fee Build-Up">          
+                <apex:variable value="{!0}" var="tempSumforsummary"/>
+                <apex:pageBlockTable value="{!componentList}" var="enr" id="pbt1">
+                    <apex:variable value="{!0}" var="cnt"/>
+                    <apex:column >
+                        <apex:CommandLink value="del" immediate="true" action="{!removePriceComp}" status="loadPcp" reRender="pbt1" id="removePriceComplink">
+                            <apex:param name="indexOfPriceComp" value="{!cnt}"/>
+                        </apex:CommandLink>
+                        <apex:variable var="cnt" value="{!cnt+1}"/> 
+                    </apex:column>
+                    <apex:column headerValue="Component">
+                        <apex:inputField value="{!enr.Components__c}" id="com" style="width:120px"/>
+                    </apex:column>
+                    <apex:column headerValue="Price">
+                         <apex:inputField value="{!enr.Price__c}" style="width:70px" id="pr"/>
+                    </apex:column>
+                    <apex:column headerValue="Per">
+                        <apex:inputField value="{!enr.Per__c}" style="width:60px" id="per"/>
+                    </apex:column>
+                    <apex:column headerValue="UoM">
+                        <apex:inputField value="{!enr.UoM__c}" style="width:60px" id="uom"/>
+                    </apex:column>
+                   <apex:column headerValue="Commodity">
+                        <apex:outputField value="{!enr.Commodity__c}" id="comm" style="width:60px"/>
+                    </apex:column>
+                    <apex:column headerValue="Priced Quantity" style="width:120px">
+                        <apex:outputField value="{!enr.Priced_Quantity__c}" id="pq"/>
+                    </apex:column>
+                    <apex:column headerValue="Priced UoM" style="width:120px">
+                        <apex:outputField value="{!enr.Priced_Quantity_UoM__c}" id="pqu"/>
+                    </apex:column>
+                    <apex:column headerValue="Total Amount" style="width:120px">
+                        <apex:outputField value="{!enr.Charge_Price__c}" id="chargePriceId"/>
+                        <apex:variable var="tempSumforsummary" value="{!enr.Charge_Price__c + tempSumforsummary}"/>
+                    </apex:column>
+                </apex:pageBlockTable>               
+                
+            </apex:pageBlockSection>
+            <apex:commandButton action="{!addPrice}" status="loadPcp" id="adp" title="Add More Component" value="+" reRender="pbt1"/>
+        
+        </apex:pageBlock>
+    </apex:form>
+    
+    <apex:outputPanel id="myJS">
+        <script>
+            hideSubSection();
+            var pageLoad = true;
+            
+            var allInputTags = document.getElementsByTagName('input');
+            var labels = document.getElementsByTagName('LABEL');
+            var allSelectTags = document.getElementsByTagName('select');            
+            
+            for(var i=0; i< allInputTags.length; i++) {
+                if(allInputTags[i].id =='myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                    allInputTags[i].parentNode.parentNode.style.visibility = 'hidden';
+            }
+            
+            for (var i = 0; i < labels.length; i++) {
+                if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                    labels[i].style.visibility = 'hidden';
+            }
+            
+            showfield(document.getElementById('myPage:my_form:myPageBlock:pgbs:myPagesectionId:priceTypeId'), true);
+            
+            function showfield(name, isCallfromPageLoad) {
+                pageLoad = isCallfromPageLoad;
+                if(name.value == 'AP') {
+                    for(var i=0; i< allInputTags.length; i++) {
+                        if(allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            allInputTags[i].parentNode.parentNode.style.visibility = 'visible';
+                    }
+                    for (var i = 0; i < labels.length; i++) {
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            labels[i].style.visibility = 'visible';
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            labels[i].style.visibility = 'hidden';
+                    }
+                    for(var i=0; i< allSelectTags.length; i++) {
+                        if(allSelectTags[i].id == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            allSelectTags[i].style.visibility = 'hidden';
+                    }
+                }
+                else {
+                    for(var i=0; i< allInputTags.length; i++) {
+                        if(allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            allInputTags[i].parentNode.parentNode.style.visibility = 'hidden';
+                    }
+                    for (var i = 0; i < labels.length; i++) {
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            labels[i].style.visibility = 'hidden';
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            labels[i].style.visibility = 'visible';
+                    }
+                    for(var i=0; i< allSelectTags.length; i++) {
+                        if(allSelectTags[i].id == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            allSelectTags[i].style.visibility = 'visible';
+                    }
+                }
+                
+                if(!pageLoad)
+                    callRenderComponent();
+            }
+                
+            function hideSubSection() {
+                if('{!toShowSubItemSection}' == 'true') {
+                    document.getElementById('myPage:my_form:myPageBlock:subItemId').style.visibility = 'visible';
+                    document.getElementById('myPage:my_form:myPageBlock:addSubItemId').style.visibility = 'visible';
+                    document.getElementById('myPage:my_form:myPageBlock:removeSubItemId').style.visibility = 'visible';
+                }
+                else if('{!toShowSubItemSection}' == 'false') {                
+                    document.getElementById('myPage:my_form:myPageBlock:subItemId').style.visibility = 'hidden';
+                    document.getElementById('myPage:my_form:myPageBlock:addSubItemId').style.visibility = 'hidden';
+                    document.getElementById('myPage:my_form:myPageBlock:removeSubItemId').style.visibility = 'hidden';
+                }  
+            }
+            
+            
+        </script>
+          
+    </apex:outputPanel>
+</apex:page>

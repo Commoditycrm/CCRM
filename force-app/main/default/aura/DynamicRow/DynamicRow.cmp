@@ -1,0 +1,164 @@
+<aura:component >    
+    <!-- Aura Attribute for store single Contact[standard Object] Instance
+         And Store Index of Particular Instance --> 
+    <aura:attribute name="PriceValue" type="Price_Master__c"/>
+    <aura:attribute name="rowIndex" type="String"/>
+    <aura:attribute name="irrate" type="decimal"/>
+    <aura:attribute name="margin" type="decimal"/>
+    <aura:attribute name="unitprice" type="decimal"/>
+    <aura:attribute name="cutmduty" type="decimal"/>
+    <aura:attribute name="premiumdiscnt" type="decimal"/>
+    <aura:attribute name="cstmclrnc" type="decimal"/>
+    <aura:attribute name="conversioncost" type="decimal"/>
+    <aura:attribute name="gst" type="decimal"/>
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteRowEvt"/> 
+    <aura:registerEvent name="AddRowEvt" type="c:AddNewRowEvt"/> 
+    <aura:handler name="getdata" event="c:getdatafromgt_quote" action="{!c.getdata}"/> 
+    <aura:handler name = "init" value="{!this}" action = "{!c.getdata}"/>
+    
+    <!-- Table Row -->   
+    
+    <tr class="slds-text-title_caps">
+      <!--  <td> 
+            {!v.rowIndex + 1}
+        </td> -->
+        <td>
+            <a onclick="{!c.removeRow}">
+                       <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                       <span class="slds-assistive-text">Delete Icon</span>
+            </a>
+        </td>
+        <td IconName="custom:custom17">
+           <!-- <c:customLookup objectAPIName="CERM__MD_Price_Component__c" IconName="custom:custom17" selectedRecord="{!v.PriceValue.CERM__Price_Component_Name__c}" /><br/> -->
+           <force:inputField aura:id="lookup"  value="{!v.PriceValue.CERM__Price_Component__c}"/> <br/> 
+          <!--  <lightning:recordEditForm aura:id="recordViewForm" recordId="{!v.PriceValue.CERM__Price_Component__c}"  objectApiName="CERM__MD_Price_Component__c" /> -->
+        </td>
+       <!-- <td >
+            <c:customLookup objectAPIName="CERM__Commodity__c" IconName="standard:record_lookup" selectedRecord="{!v.PriceValue.CERM__Commodity__c.id}"  label="{!v.PriceValue.CERM__Commodity__c}"/><br/> 
+             <force:inputField aura:id="lookup" value="{!v.PriceValue.CERM__Commodity__c}"/> <br/>
+        </td> -->
+        
+        <td >
+            <aura:if isTrue="{!or(v.PriceValue.CERM__Price_Component_Name__c == 'Margin',v.PriceValue.CERM__Price_Component_Name__c == 'Interest rate')}">
+                <div class="slds-truncate" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Percent__c}"/></div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!or(v.PriceValue.CERM__Price_Component_Name__c == 'GST',v.PriceValue.CERM__Price_Component_Name__c == 'Custom Duty')}">
+                        <div class="slds-truncate" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Percent__c}"/></div>
+                    	<aura:set attribute="else">
+                            <aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == ' '}">
+                        		<div class="slds-truncate" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Percent__c}"/></div>
+                            </aura:if>    
+                		</aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+            
+        </td>
+        <td >
+            <aura:if isTrue="{!or(v.PriceValue.CERM__Price_Component_Name__c == 'Conversion Cost',v.PriceValue.CERM__Price_Component_Name__c == 'LME Price')}">
+                <div class="slds-truncate" IconName="standard:currency" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Price__c}"/></div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!or(v.PriceValue.CERM__Price_Component_Name__c == 'Custom Clearance',v.PriceValue.CERM__Price_Component_Name__c == 'Premium/Discount')}">
+                        <div class="slds-truncate" IconName="standard:currency" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Price__c}"/></div>
+                        <aura:set attribute="else">
+                        		<div class="slds-truncate" IconName="standard:currency" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__Price__c}"/></div>
+                		</aura:set>
+                    </aura:if>
+                </aura:set>
+                
+            </aura:if>
+            
+        </td>
+        <td >
+            <force:inputField aura:id="lookup" value="{!v.PriceValue.CERM__Currency__c}"/> <br/>
+         <!--/ <c:customLookup objectAPIName="CERM__Currency__c" IconName="standard:currency"   selectedRecord="{!v.PriceValue.CERM__Currency__c}" /><br/> -->
+        </td> 
+         <td >
+             <aura:if isTrue="{!or(v.PriceValue.CERM__Price_Component_Name__c == 'LME Price',v.PriceValue.CERM__Price_Component_Name__c == 'Premium/Discount')}">
+                <div class="slds-truncate" ><ui:inputText class="slds-input" value="{!v.PriceValue.CERM__FX_Rate__c}"/></div>
+                
+            </aura:if>
+            
+        </td>
+        <td >
+            <div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.PriceValue.CERM__Per__c}"/></div>
+        </td>
+        
+        <td >
+            <div>
+                <!--  <c:customLookup objectAPIName="CERM__MD_Unit_of_Measure__c"  iconName="custom:custom90"  selectedRecord="{!v.PriceValue.CERM__PerUoM__c}" /><br/>  -->
+                 <force:inputField aura:id="lookup"  value="{!v.PriceValue.CERM__Number_of_Days__c}"/> <br/> 
+            
+            </div>
+        </td> 
+        <td >
+            <div>
+                <!--  <c:customLookup objectAPIName="CERM__MD_Unit_of_Measure__c"  iconName="custom:custom90"  selectedRecord="{!v.PriceValue.CERM__PerUoM__c}" /><br/>  -->
+                 <force:inputField aura:id="lookup"  value="{!v.PriceValue.CERM__PerUoM__c}"/> <br/> 
+            
+            </div>
+        </td> 
+       <!-- ir value{!v.irrate} -->
+        <td >
+            <aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Margin'}">
+                <div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.margin}"/></div>
+                 <aura:set attribute="else">
+                     <aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Conversion Cost'}">
+                     	<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.conversioncost}"/></div>
+                         <aura:set attribute="else">
+                     		<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Custom Duty'}">
+                     			<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.cutmduty}"/></div>
+                     			<aura:set attribute="else">
+                     				<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Interest rate'}">
+                     					<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.irrate}"/></div>
+                                        <aura:set attribute="else">
+                     						<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Premium/Discount'}">
+                     							<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.premiumdiscnt}"/></div>
+                                                <aura:set attribute="else">
+                     								<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'LME Price'}">
+                     									<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.unitprice}"/></div>
+                                                        <aura:set attribute="else">
+                     										<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'Custom Clearance'}">
+                     											<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.cstmclrnc}"/></div>
+                     											<aura:set attribute="else">
+                     												<aura:if isTrue="{!v.PriceValue.CERM__Price_Component_Name__c == 'GST'}">
+                     													<div class="slds-truncate" ><ui:inputText class="slds-input"  value="{!v.gst}"/></div>
+                     												</aura:if>
+                												</aura:set>
+                                                            </aura:if>
+                										</aura:set>
+                     								</aura:if>
+                								</aura:set>
+                     						</aura:if>
+                						</aura:set>
+                     				</aura:if>
+                				</aura:set>
+                             </aura:if>
+                		</aura:set>
+                     </aura:if>
+                </aura:set>
+            </aura:if>
+        </td>
+      <!--  <td >
+            <div class="slds-truncate" IconName="standard:currency" ><ui:inputText class="slds-input" value="{!v.PriceValue.Name}"/></div>
+        </td> -->
+         <td>
+            <aura:if isTrue="{!v.rowIndex == 0}">
+              <!--  <a onclick="{!c.AddNewRow}">
+                  <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                  <span class="slds-assistive-text">Add Icon</span>
+                </a>    -->
+             <!-- <aura:set attribute="else">
+                  <a onclick="{!c.removeRow}">
+                   <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                   <span class="slds-assistive-text">Delete Icon</span>
+                  </a>
+              </aura:set> -->
+            </aura:if>
+        </td> 
+
+    </tr>
+        
+</aura:component>

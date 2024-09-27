@@ -1,0 +1,25 @@
+.THIS .buttoncls {
+    background-color: #F04923!important;;
+    border-color:  #F04923!important;;
+    margin-top: 10px;
+    color: #fff!important;
+    margin-bottom: 10px;
+    margin-left:3%;
+    font-size: 14px;
+    font-weight:400;
+   font-family: Open Sans,Segoe UI,Helvetica Neue,Helvetica,Raleway,Arial,sans-serif;
+    -webkit-transition: background .1s ease,border .1s ease;
+    -o-transition: background .1s ease,border .1s ease;
+    transition: background .1s ease,border .1s ease;
+    font-size: 14px;
+    min-width: 36px;
+    background: rgba(0,0,0,0);
+    border: 1px solid #fff;
+    line-height: 36px;
+    min-height: 36px;
+    padding: 0 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block; 
+    
+}

@@ -1,0 +1,36 @@
+<template >
+<button  onclick={clickme} style="width:auto;">Sign In</button>
+    <div id=id01 class="modal">      
+      <form class="modal-content" action="/action_page.php">
+        <div class="container">
+          <h1>Sign In</h1>
+            <span onclick={CloseModal} class="close" title="CloseModal">&times;</span>
+          <hr>
+          <label for="email" ><b>Email/Username</b></label>
+          <br>
+          <input type="text" size="30" name="email" required>
+          </br>
+          
+          <label for="psw"><b>Password</b></label>
+    
+          <br>
+          <input type="password" size="20" name="psw"  required>
+            <span class="psw"> <a href="#">Forgot?</a></span>
+          </br>
+        
+          <div class="clearfix"> 
+            <button type="submit" class="signupbtn">Sign In</button>
+            <br>
+            <label>
+            <input type="checkbox" checked="checked" name="remember" > Keep me Signed in
+          </label>
+          </br>
+            <div class="container Register">
+        <p>Don't have an account? <a href="#" style="color:dodgerblue">Create One</a>.</p>
+      </div>
+          </div>
+        </div>
+      </form>
+    </div>
+      
+</template>

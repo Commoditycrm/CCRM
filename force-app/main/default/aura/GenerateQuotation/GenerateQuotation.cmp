@@ -1,0 +1,601 @@
+<aura:component controller = "generate_quotation" implements="clients:availableForMailAppAppPage,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name = "commodity" type = "Commodity__c" />
+    <aura:attribute name = "wrpclass" type="generate_quotation"/>
+    <aura:attribute name = "Account" type = "Account" />
+    <aura:attribute name = "AccountRec" type = "Account"/>
+    <aura:attribute name = "Location" type = "BusinessLocation__c"/>
+    <aura:attribute name = "LocationRec" type = "BusinessLocation__c"/>
+    <aura:attribute name = "quantity" type = "decimal"/>
+    <aura:attribute name = "UnitPrice" type = "decimal"/>
+	<aura:attribute name = "Premium" type = "decimal"/>
+	<aura:attribute name = "CustomClearance" type = "decimal"/>
+	<aura:attribute name = "ConversionCost" type = "decimal"/>
+	<aura:attribute name = "InterestRate" type = "decimal"/>
+    <aura:attribute name = "InterestRatepercent" type = "decimal"/>
+    <aura:attribute name = "Marginpercent" type = "decimal"/>
+    <aura:attribute name = "InterestRatedays" type = "decimal"/>
+	<aura:attribute name = "Margin" type = "decimal"/>
+    <aura:attribute name = "RbiRate" type = "decimal"/>
+    <aura:attribute name = "GTotal1" type = "Integer"/>
+    <aura:attribute name = "GTotal2" type = "decimal"/>
+    <aura:attribute name = "FinalPrice" type = "decimal"/>
+    <aura:attribute name = "basicPrice" type = "decimal"/>
+	<aura:attribute name = "percent" type = "String"/>
+    <aura:attribute name = "GstPrice" type = "string"/>
+    <aura:attribute name = "PremiumUoM" type = "String"/>
+	<aura:attribute name = "CustomClearanceUoM" type = "string"/>
+	<aura:attribute name = "ConversionCostUoM" type = "string"/>
+	<aura:attribute name = "InterestRateUoM" type = "string"/>
+	<aura:attribute name = "MarginUoM" type = "string"/>
+    <aura:attribute name = "uom" type = "MD_Unit_of_Measure__c"/>
+    <aura:attribute name = "Fromuom" type = "MD_Unit_of_Measure__c"/> 
+    <aura:attribute name = "Touom" type = "MD_Unit_of_Measure__c"/>
+   <!-- <aura:attribute name="Fromuom" type="CERM__Quotation__c" default="{ 'sobjectType' : 'CERM__Quotation__c' }"/> -->
+    <aura:attribute name = "calculatedunitprice" type = "decimal"/>
+    <aura:attribute name = "calculatedprmprice" type = "decimal"/>
+    
+     <aura:attribute name = "Fromcurrency" type = "Currency__c"/>
+    <aura:attribute name = "Tocurrency" type = "Currency__c"/>
+    <aura:attribute name = "convertedcurrency_val" type = "decimal"/>
+    <aura:attribute name = "Beforcurrency_val" type = "decimal"/>
+    
+     <aura:attribute name = "Toweight" type = "decimal"/>
+    <aura:attribute name = "Touom_name" type = "string"/>
+    <aura:attribute name = "unit_price_for_Toweight" type = "decimal"/>
+    
+    <aura:attribute name = "PremiumPrice" type = "string"/>
+	<aura:attribute name = "CustomClearancePrice" type = "string"/>
+	<aura:attribute name = "ConversionCostPrice" type = "string"/>
+	<aura:attribute name = "InterestRatePrice" type = "string"/>
+	<aura:attribute name = "MarginPrice" type = "string"/>
+    
+    <aura:attribute name = "KGval" type = "string"/>
+    <aura:attribute name = "MTval" type = "string"/>
+    <aura:attribute name = "INRval" type = "string"/>
+    <aura:attribute name = "USDval" type = "string"/>
+    
+    <aura:attribute name = "Lmeprice" type = "decimal"/>
+    <aura:attribute name = "mcxprice" type = "decimal"/>
+    <aura:attribute name = "etalbullet" type = "decimal"/>
+    <aura:attribute name = "landedprocurement" type = "decimal"/>
+    
+    
+    <aura:attribute name = "accEmail" type = "string"/>
+    <aura:attribute name = "numberofdays" type = "Integer"/>
+    <aura:attribute name = "sendEmail" type = "boolean" />
+    
+    <aura:attribute name = "flatprice" type = "String"/>
+    <aura:attribute name = "pricestatus" type = "String"/>
+    <aura:attribute name = "postingDate" type = "Date"/>
+    <aura:attribute name = "DlvryStartDate" type = "Date"/>
+    <aura:attribute name = "DlvryEndDate" type = "Date"/>
+    <aura:attribute name = "refernceTitle" type = "string"/>
+    <aura:attribute name = "deliveryType" type = "string"/>
+    <aura:attribute name = "paymentTerm" type = "string"/>
+    <aura:attribute name = "IncoTerm" type = "string"/>
+    <aura:attribute name = "gstNo" type = "string"/>
+    <aura:attribute name = "Address" type = "string"/>
+    <aura:attribute name = "cusPrice" type = "string"/>
+    <aura:attribute name = "cusUoM" type = "string"/>
+    <aura:attribute name = "customduty" type = "decimal"/>
+    <aura:attribute name = "cuspercent" type = "decimal"/>
+    <aura:attribute name = "notes" type = "string"/>
+    <aura:attribute name = "incoterm2" type = "string"/>
+    <aura:attribute name = "inventory" type = "BL_Commodity__c"/>
+    <aura:attribute name="uomMap" type="Map" />
+    <aura:attribute name="gstper" type="decimal" />
+	<aura:attribute name="calcgstamt" type="decimal" />
+   
+    <!-- <aura:attribute name ="Plist" type="CERM__Price_Master__c[]" /> -->
+    <aura:attribute name="rowIndex" type="String" default = "0"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name = "PriceMasterList" type = "Price_Master__c[]"/>
+    <aura:handler name = "change" value = "{!v.Account}" action = "{!c.accountChange}"/>
+    <aura:handler name = "change" value = "{!v.commodity}" action = "{!c.getPrice}"/>
+    <aura:handler name = "change" value = "{!v.Location}" action = "{!c.getPrice}"/>
+    <aura:handler name = "change" value = "{!v.commodity}" action = "{!c.getInventoryInfo}"/>
+    <aura:handler name = "change" value = "{!v.Location}" action = "{!c.getInventoryInfo}"/>
+    <aura:handler name = "change" value = "{!v.AccountRec.CERM__Number_of_Days__c}" action = "{!c.getintPrice}"/>
+    <aura:handler name = "change" value = "{!v.GTotal1}" action = "{!c.calculateB}"/>
+    <aura:handler name = "change" value = "{!v.GTotal2}" action = "{!c.calpriceafterGST}"/>
+    <aura:handler name = "change" value = "{!v.GTotal2}" action = "{!c.calpricecustomduty}"/>
+    <aura:handler name = "change" value = "{!v.GstPrice}" action = "{!c.calInterest}"/>
+    
+    <aura:handler name = "change" value = "{!v.FinalPrice}" action = "{!c.calculatebase}"/>
+    <aura:handler name = "change" value = "{!v.Margin}" action = "{!c.calculateFInal}"/>
+    <aura:handler name = "change" value = "{!v.InterestRate}" action = "{!c.calculateMargin}"/>
+    <aura:handler name = "change" value = "{!v.InterestRatepercent}" action = "{!c.calInterest}"/>
+    <aura:handler name = "change" value = "{!v.cuspercent}" action = "{!c.calpricecustomduty}"/>
+
+    <aura:handler name = "change" value = "{!v.Premium}" action = "{!c.calculateA}"/>
+    <aura:handler name = "change" value = "{!v.CustomClearance}" action = "{!c.calculateB}"/>
+    <aura:handler name = "change" value = "{!v.ConversionCost}" action = "{!c.calculateB}"/>
+    <aura:handler name = "init" value="{!this}" action = "{!c.doinit}"/>
+    <aura:handler name = "change" value="{!v.Fromuom}" action = "{!c.weightconv}"/>
+    <aura:handler name = "change" value="{!v.Touom}" action = "{!c.weightconv}"/>
+    <aura:handler name = "change" value="{!v.quantity}" action = "{!c.weightconv}"/>
+    <aura:handler name = "change" value = "{!v.unit_price_for_Toweight}" action = "{!c.calculateA}"/>
+    
+    <aura:handler name="DeleteRowEvt" event="c:DeleteRowEvt" action="{!c.removeDeletedRow}" />
+    <aura:handler name="AddRowEvt" event="c:AddNewRowEvt" action="{!c.addNewRow}"/>   
+    <!-- register event -->
+    
+    <aura:registerEvent name="get_data" type="c:getdatafromgt_quote"/>  
+  <!--  <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> -->
+    
+   <!-- <aura:attribute name="PriceValue" type="Price_Master__c"/> -->
+   <!-- <aura:attribute name="rowIndex" type="String"/> -->
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteRowEvt"/> 
+    <aura:registerEvent name="AddRowEvt" type="c:AddNewRowEvt"/> 
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+
+<lightning:card variant="Narrow" title=" Quotation Information" iconName="action:quote">
+       
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container slds-is-fixed">
+        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative " role="status">
+         <span class="slds-assistive-text">Loading</span>
+         <div class="slds-spinner__dot-a"></div>
+         <div class="slds-spinner__dot-b"></div> 
+           
+       </div>
+    </div> 
+    
+ </aura:if>
+    
+    <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+      <div class="slds-form-element">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+               <!-- <lightning:recordEditForm aura:id="editForm"  objectApiName="CERM__Quotation__c" >
+                	<lightning:inputField fieldName="CERM__Commodity__c" value = "{!v.commodity}" />
+                </lightning:recordEditForm>
+                {!v.commodity} -->
+                        <c:customLookup objectAPIName="CERM__Commodity__c" IconName="standard:record_lookup" selectedRecord="{!v.commodity}" label="Commodity" /><br/>
+                        <ui:inputSelect aura:Id="makeId" multiple="false" label="Price Type" required = "true" change = "{!c.changePricetype}">
+                        <ui:inputSelectOption label="--None--" text="None"/>
+                        <ui:inputSelectOption label="Formula based Flat" text="Formula based Flat"/>
+                        <ui:inputSelectOption label="Formula Price" text="Formula Price"/>
+                        <ui:inputSelectOption label="Flat Price" text="Flat Price"/>
+                    </ui:inputSelect>
+                <div><br/></div>
+                <div><br/></div>
+                    <ui:inputSelect multiple="false" label="Reference Title" value = "{!v.refernceTitle}">
+                        <ui:inputSelectOption label="--None--" text="None"/>
+                        <ui:inputSelectOption label="Email" text="Email"/>
+                        <ui:inputSelectOption label="Telecomm" text="Telecomm"/>
+                        <ui:inputSelectOption label="Meeting" text="Meeting"/>
+                    </ui:inputSelect><br/>
+                	<div><br/></div>
+                    <lightning:input name = "Posting Date" type = "date" label = "Posting Date" value = "{!v.postingDate}" />
+            </div>
+            
+            <div class="slds-col">
+                    <c:customLookup objectAPIName="Account" IconName="standard:client" selectedRecord="{!v.Account}" label="Account" /><br/>
+                    <lightning:input aura:id = "CreditLimit" value="{!v.AccountRec.CERM__Credit_Limit__c}" label = "Credit Limit" disabled = "true" /><br/>
+                    <lightning:input aura:id = "ConsumedCredit" value="{!v.AccountRec.CERM__Consumed_Credit__c}" label = "Consumed Credit" disabled = "true" /><br/>
+                    <lightning:input aura:id = "OpenCredit" value="{!v.AccountRec.CERM__Open_Credit__c}" label = "Open Credit" disabled = "true" /><br/>
+            </div>
+            
+            <div class="slds-col">
+                    <c:customLookup objectAPIName="CERM__BusinessLocation__c" IconName="standard:address" selectedRecord="{!v.Location}" label="Location" /><br/> 
+                    <lightning:input aura:id = "LocationAddress" value="{!v.LocationRec.CERM__Address__c}" label = "Location Address" disabled = "true" /><br/>
+                    <lightning:input aura:id = "GSTNumber" value="{!v.LocationRec.CERM__GST_No__c}" label = "GST Number" disabled = "true" /><br/> 
+                    <!--<lightning:input aura:id = "GSTNumber" value="{!v.LocationRec.CERM__GST_No__c}" label = "GST Number" disabled = "true" /><br/> -->
+                    <ui:inputSelect multiple="false" label="GST Type" value = "{!v.deliveryType}" required = "true">
+                    <ui:inputSelectOption label="--None--" text="None"/>
+                    <ui:inputSelectOption label="Local" text="Local"/>
+                    <ui:inputSelectOption label="Inter State" text="Inter State"/>
+                    </ui:inputSelect>
+            </div>
+        </div> 
+      </div>
+    </div>
+    <!--<div col="2" > -->
+            <!-- hide shippping section -->
+            
+               <h3 class="slds-section-title--divider" >Shipping and Inventory Information</h3>
+               <!-- <lightning:card variant="Narrow" title="Price Comonents" iconName="custom:custom17" ></lightning:card> -->
+           
+                <!--<div class="slds-panel slds-size_x-large slds-panel_docked slds-panel_docked-left slds-is-open slds-col" width="50%" aria-hidden="false"> -->
+    <lightning:layout multipleRows="true" >    
+        <lightning:layoutItem padding="around-small" size="6">
+            <!-- coloumn 1 shipping info -->
+            <h3 class="slds-section-title--divider" >Shipping Information</h3>
+            <div class="page-section page-right">
+                <div class="" aura:id="hideshippingsection">               
+                    <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small " >
+                        <div class="slds-form-element">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col">
+                                    <lightning:input name = "Delivery Start Date" type = "date" label = "Delivery Start Date" value = "{!v.DlvryStartDate}" /> <br/>
+                                    <ui:inputSelect multiple="false" label="Payment Term" value = "{!v.paymentTerm}" required = "true">
+                                        <ui:inputSelectOption label="--None--" text="None"/>
+                                        <ui:inputSelectOption label="COD" text="COD"/>
+                                        <ui:inputSelectOption label="7" text="7"/>
+                                        <ui:inputSelectOption label="30" text="30"/>
+                                        <ui:inputSelectOption label="45" text="45"/>
+                                        <ui:inputSelectOption label="60" text="60"/>
+                                        <ui:inputSelectOption label="75" text="75"/>
+                                        <ui:inputSelectOption label="90" text="90"/>
+                                    </ui:inputSelect><br/>
+                                    <lightning:input name = "Notes" type = "text" label = "Notes" value = "{!v.notes}" /> <br/>
+                                </div>
+                                
+                                <div class="slds-col">  
+                                    <lightning:input name = "Delivery End Date" type = "date" label = "Delivery End Date" value = "{!v.DlvryEndDate}" /> <br/>
+                                    <ui:inputSelect multiple="false" label="Inco Term" value = "{!v.IncoTerm}" required = "true">
+                                        <ui:inputSelectOption label="--None--" text="None"/>
+                                        <ui:inputSelectOption label="CFR" text="CFR"/>
+                                        <ui:inputSelectOption label="CIF" text="CIF"/>
+                                        <ui:inputSelectOption label="EXW" text="EXW"/>
+                                        <ui:inputSelectOption label="FOB" text="FOB"/>
+                                        <ui:inputSelectOption label="FOR Delivered" text="FOR Delivered"/>
+                                    </ui:inputSelect><br/>
+                                    <lightning:input name = "Inco Term2" type = "text" label = "Inco term2" value = "{!v.incoterm2}" /> 
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </lightning:layoutItem>
+    	<div><br/></div>
+        <!-- coloumn 2 inventory info -->
+        <lightning:layoutItem padding="around-small" size="6">
+         <h3 class="slds-section-title--divider" >Inventory Information</h3>
+            <lightning:layout >
+                <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small " >
+                    <div class="slds-form-element">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">     
+                                <lightning:input aura:id = "netStock" value="{!v.inventory.CERM__Net_Stock_Position__c}" label = "Net Stock Position" disabled = "true" />     
+                            </div>
+                            <div class="slds-col">     
+                                <lightning:input aura:id = "InTransit" value="{!v.inventory.CERM__In_transit_Inventory_Incoming__c}" label = "In Transit" disabled = "true" />        
+                            </div>
+                            <div class="slds-col">     
+                                <lightning:input aura:id = "InTransit1" value="{!v.inventory.CERM__Stock_in_Transition__c}" label = "Stock In Hand" disabled = "true" />       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:layout>
+        </lightning:layoutItem>
+    </lightning:layout>
+  	<div class="slds-col" width = "10%">     
+        <lightning:input aura:id="Qty1" name = "Quantity" type = "decimal" required ="true" value = "{!v.quantity}" label = "Quantity" onfocusout = "{!c.openpricecomp}"/>
+    </div><br/>
+        <!-- hide price component section -->
+    <div class="slds-page-header" style="cursor: pointer;" onclick="{!c.sectionhide}">
+        <section class="slds-clearfix" iconName="Action:preview">
+            <div class="slds-float--left " >
+                <lightning:icon class="slds-show" aura:id="collapsesection" iconName="utility:chevrondown" size="x-small" alternativeText="add section"/>
+                <lightning:icon class="slds-hide" aura:id="collapsesection" iconName="utility:chevronup" size="x-small" alternativeText="collapse section"/>
+            </div>
+            
+            <div class="slds-m-left--large" >PRICE COMPONENTS</div>
+           <!-- <lightning:card variant="Narrow" title="Price Comonents" iconName="custom:custom17" ></lightning:card> -->
+        </section> 
+    </div>
+             
+    <div class="slds-hide slds-p-around--medium" aura:id="collapsesection">    
+        
+       <button class="slds-button slds-button_brand" onclick="{!c.addNewRow}">Add More Component</button>
+       <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+            <thead>
+                <tr class="slds-text-title_caps">
+                   <!-- <th scope="col">
+                        <div class="slds-truncate" >S.No</div>
+                    </th> -->
+                    <th scope="col" width="2%">
+                        <div class="slds-truncate" title="Action" align = "center">Delete</div>
+                     </th>
+                    <th scope="col" width="20%">
+                        <div class="slds-truncate" title="Component"  align = "center">Component</div>
+                    </th> 
+                    <!-- <th scope="col">
+                        <div class="slds-truncate" title="Commodity">Commodity</div>
+                    </th> -->
+                   
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="%"  align = "center">%</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Price"  align = "center">Price</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Currency" align = "center">Currency</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="FXRate" align = "center">FX Rate</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Per"  align = "center">Per</div>
+                    </th>
+                   <!-- <th scope="col">
+                        <div class="slds-truncate" title="PerUom">Per Uom</div>
+                    </th> -->
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="# Days" align = "center"># Days</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="price master" align = "center">UOM</div>
+                    </th>
+                    <th scope="col" width="25%">
+                        <div class="slds-truncate" title="Amount" align = "center">Calculted Amount(INR)</div>
+                    </th>
+                  <!--   -->
+                    
+                   <!-- <th scope="col">
+                        <div class="slds-truncate" title="Account">Account</div>
+                    </th> -->
+                </tr>
+            </thead>   
+            <tbody>
+               <!--Iterate price master list -->         
+                <aura:iteration items="{!v.PriceMasterList}" var="item" indexVar="index">
+                    <c:DynamicRow PriceValue ="{!item}" rowIndex="{!index}" irrate="{!v.InterestRate}" unitprice = "{!v.calculatedunitprice}" conversioncost= "{!v.ConversionCost}" cstmclrnc ="{!v.CustomClearance}"   premiumdiscnt = "{!v.calculatedprmprice}" margin ="{!v.Margin}" cutmduty= "{!v.customduty}" gst = "{!v.calcgstamt}"/> 
+                    
+                </aura:iteration>
+                
+            </tbody>
+        </table><br/>
+        <!--Save Button which is call Save js function on click --> 
+        <button class="slds-button slds-button_brand" onclick="{!c.Save}">Calculate</button>
+        <div><br/></div>
+        <table>
+        <thead>
+            <tr>
+                <th scope="col" width="15%">
+                    <div class="slds-box" width="10%">
+                        Gross total A  <br/> <lightning:formattedNumber aura:id="nameOutput" value="{!v.GTotal1}" />
+                    </div>
+                </th>
+                <th scope="col" width="15%">
+                    <div class="slds-box" width="10%">
+                        Gross total B <br/><lightning:formattedNumber aura:id="nameOutput" value="{!v.GTotal2}"/>
+                    </div>
+                </th>
+                <th scope="col" width="15%">
+                    <div class="slds-box" width="10%">
+                       After 18% GST  <br/> <lightning:formattedNumber aura:id="nameOutput" value="{!v.GstPrice}"/>
+                    </div>
+                </th>
+                <th scope="col" width="15%">
+                    <div class="slds-box" width="10%">
+                       Final Price of Offer  <br/> <lightning:formattedNumber aura:id="nameOutput" value="{!v.FinalPrice}"/>
+                    </div>
+                </th>
+                <th scope="col" width="15%">
+                    <div class="slds-box" width="10%">
+                        TOTAL BASIC PRICE PER KG (R/O)  <br/> <lightning:formattedNumber aura:id="nameOutput" value="{!v.basicPrice}"/>
+                    </div>
+                </th>
+            </tr>
+         </thead>
+        
+        </table>
+    </div>
+    <div><br/></div>
+    <!-- hide weight and currency conversion section -->
+    <div class="slds-page-header" style="cursor: pointer;" onclick="{!c.hideweightsection}">
+        <section class="slds-clearfix" iconName="Action:preview">
+            <div class="slds-float--left " >
+                
+                <lightning:icon class="slds-show" aura:id="collapseweightsection" iconName="utility:chevrondown" size="x-small" alternativeText="add section"/>
+                <lightning:icon class="slds-hide" aura:id="collapseweightsection" iconName="utility:chevronup" size="x-small" alternativeText="collapse section"/>
+            </div>
+            
+            <div class="slds-m-left--large " >WEIGHT AND CURRENCY CONVERSION</div>
+           <!-- <lightning:card variant="Narrow" title="Price Comonents" iconName="custom:custom17" ></lightning:card> -->
+        </section> 
+    </div>
+       
+    
+        <div class="slds-hide slds-p-around--medium" aura:id="collapseweightsection">    
+        	<div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small " >
+                <div class="slds-form-element">
+                    <div class="slds-grid slds-gutters">
+                        <!-- section 1 -->
+                        <div class="slds-col">     
+                            <lightning:input aura:id="Qty1" name = "Quantity" type = "decimal" required ="true" value = "{!v.quantity}" label = "Quantity" />
+                            <lightning:input name = "Unit Price" aura:id="Up" required ="true" type = "number" step="any" value = "{!v.UnitPrice}" label = "Unit Price" onfocusout = "{!c.calculateA}"/>
+                            Quantity in {!v.Touom_name} <br/>
+                            <lightning:formattedNumber aura:id="nameOutput" value="{!v.Toweight}"/>
+                            
+                        </div>
+                        <!-- section 2 -->
+                        <div class="slds-grid slds-wrap">     
+                            <div class="slds-col slds-size_10-of-12">
+                              <c:customLookup objectAPIName="CERM__MD_Unit_of_Measure__c"  IconName="standard:account"  selectedRecord="{!v.Fromuom}" label="From Uom"/>
+                               <!--From Uom
+                                <force:inputField aura:id="lookup"  value="{!v.Fromuom.CERM__UOM__c}" />  -->
+                                <c:customLookup objectAPIName="CERM__MD_Unit_of_Measure__c"  IconName="standard:account"  selectedRecord="{!v.Touom}" label="To Uom"/>
+                            </div>
+                            <div class="slds-col slds-grid slds-size_1-of-2">   
+                                <div class="slds-col slds-size_1-of-2">
+                                    unit price per {!v.Touom_name}  ( {!v.Fromcurrency.Name} )<br/>
+                                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.unit_price_for_Toweight}" /><br/>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    unit price per {!v.Touom_name} ( {!v.Tocurrency.Name} )<br/>
+                                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.convertedcurrency_val}"/>
+                                </div>
+                            </div>
+                        </div>   
+                        
+                        <div class="slds-col">   
+                            <c:customLookup objectAPIName="CERM__Currency__c"  IconName="standard:account"  selectedRecord="{!v.Fromcurrency}" label= "From Currency"/>
+                            <c:customLookup objectAPIName="CERM__Currency__c"  IconName="standard:account"  selectedRecord="{!v.Tocurrency}" label="To Currency"/>
+                            <lightning:input name = "RBI Rate" aura:id="RBI" type = "number" required ="true" step="any" value = "{!v.RbiRate}" label = "RBI Reference Rate" onfocusout = "{!c.calculateA}"/>
+                        </div>
+                    </div>
+                </div>
+    	</div>
+    </div>
+    <div><br/></div>
+ <h3 class="slds-section-title--divider" >Price Details</h3> 
+    <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+      <div class="slds-form-element">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <div class="align-margin">
+                </div>
+                    <lightning:input aura:id = "flatPrice" value = "{!v.flatprice}" label = "Flat Price" onfocusout = "{!c.changePricetype}"/>  
+                    
+                    Gross Total (A)
+                    <div>
+                        <br/>
+                    </div>
+                    
+                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.GTotal1}" />
+                    <div>
+                        <br/>
+                    </div>
+              
+                    Interest percentage for {!v.AccountRec.CERM__Number_of_Days__c} days
+                    <div>
+                        <br/>
+                    </div>
+                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.InterestRatepercent}"/>{!v.percent}
+        
+                    <br/>
+                    <div><br/></div>
+                    <div><br/></div>
+                    <br/>
+                    Custom Duty
+                    <div>
+                        <br/>
+                    </div>
+                    <lightning:formattedNumber aura:id="customduty1" value="{!v.cuspercent}"/>{!v.percent}
+        
+                    
+                    <br/>
+                    <div><br/></div>
+                    <div><br/></div>
+                    Margin Percentage
+                    <div><br/></div>
+                    
+                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.Marginpercent}"/>{!v.percent}
+        
+                    <div><br/></div>
+                    
+                    Final Price of Offer
+                    <div>
+                        <br/>
+                    </div>
+                    
+                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.FinalPrice}"/>
+                  
+                    <div>
+                        <br/>
+                    </div>
+                    
+                    <lightning:input name = "LME Price" type = "decimal" step="any" value = "{!v.Lmeprice}" label = "LME Price" />
+                    <lightning:input name = "MCX Price" type = "decimal" step="any" value = "{!v.mcxprice}" label = "MCX Price" />
+                    <lightning:input name = "Etal Bulletin Price" type = "decimal" step="any" value = "{!v.etalbullet}" label = "Metal Bulletin Price" />
+                    <lightning:input name = "Landed Procurement Cost" type = "decimal" step="any" value = "{!v.landedprocurement}" label = "Landed Procurement Cost"/>
+                    
+                    <ui:inputcheckbox label = "Send Email? " aura:id="sendemail" value = "{!v.sendEmail}" change="{!c.enableEmail}"  /> <br/>
+                    <label class="slds-form-element__label" for="emailvalue">
+                    </label>
+                    <lightning:helptext content="Separate Email Addresses with ';' for multiple Email Addresses" ></lightning:helptext>
+                    <ui:inputtext class="hideLabel" label = "Email Id: " aura:id="emailvalue" value = "{!v.accEmail}"/>
+                        
+            </div> 
+            
+            <div class="slds-col">
+          
+                
+                <div><br/></div>
+                <div><br/></div>
+                <div><br/></div>
+                <div><br/></div>
+                Gross Total (B)
+                <div><br/></div>
+                    <lightning:formattedNumber aura:id="nameOutput" value="{!v.GTotal2}"/>
+                <div><br/></div>
+                
+                Credit Days
+                <div>
+                <lightning:input name = "Number of Days"  type="string"  aura:id="numberofdays" value = "{!v.AccountRec.CERM__Number_of_Days__c}" Label = "Number of Days" />
+                </div>
+                <div><br/></div>
+                <lightning:input name = "cusduty" aura:id="customduty" type = "number" maximumFractionDigits= "2" format=".0%" step="any" value = "{!v.customduty}" label = "Custom Duty" onfocusout = "{!c.calculateFInal}"/>
+                <div><br/></div>
+                <lightning:input name = "Margin" aura:id="margin" type = "number" maximumFractionDigits= "2" format=".0%" step="any" value = "{!v.Margin}" label = "Margin" onfocusout = "{!c.calculateFInal}"/>
+                  <div><br/></div>
+                TOTAL BASIC PRICE PER KG (R/O)
+                <div><br/></div>
+                <lightning:formattedNumber aura:id="nameOutput" value="{!v.basicPrice}"/>
+            </div>
+            <div class="slds-col">
+                <div><br/></div>
+                <div><br/></div>
+                <div><br/></div>
+                <div><br/></div>
+                After 18% GST
+                <div><br/></div>
+                <lightning:formattedNumber aura:id="nameOutput" value="{!v.GstPrice}"/>
+                <div><br/></div><br/>
+                <lightning:input aura:id = "Interestrate" name = "Interest Rate" type = "number" step="any" value = "{!v.InterestRate}" label = "Interest Rate" />
+    
+            </div>
+        </div> 
+      </div>
+    </div>
+    
+    <!-- open component when click send email -->
+    <!--<aura:if isTrue="{!v.sendEmail}">
+            
+             
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                   
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Send Email to Customer</h2>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c:EmailSend/>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                      <lightning:button variant="brand" 
+                                          label="Like and Close"
+                                          title="Like and Close"
+                                          onclick="{! c.likenClose }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            
+            
+        </aura:if> -->
+    
+    
+    
+    <div align = "center" style = "font-size:20px;">
+       <ui:outputText value="{!v.msg}"/> 
+    </div>&nbsp;
+             
+    <div>
+        <lightning:button class="slds-button slds-button_brand" name="Generate PDF" label="Generate PDF" onclick="{!c.redirect}"/>
+    </div>
+</lightning:card>
+   
+</aura:component>

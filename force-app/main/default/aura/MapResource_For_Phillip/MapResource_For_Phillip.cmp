@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    <!--<aura:handler event="c:MapEvent" action="{!c.accountsLoaded}"/>
+    <aura:handler event="c:MapIntEvent" action="{!c.INTaccountsLoaded}"/>
+    <aura:handler event="c:MapAccEvent" action="{!c.AccaccountsLoaded}"/>
+    <aura:handler event="c:MapOffEvent" action="{!c.OffaccountsLoaded}"/>
+    <aura:handler event="c:MapItemEvent" action="{!c.ItemaccountsLoaded}"/>-->
+    <aura:handler event="c:Map_For_Phillip_Select_RecordEvent" action="{!c.accountSelected}"/>
+     <aura:handler event="c:MAP_Inv_Event" action="{!c.menuchanged}"/>
+   
+    <aura:attribute name="value" type="Decimal"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="map" type="Object"/>
+    <aura:attribute name="tile" type="Object"/>
+    <aura:attribute name="control" type="Object"/>
+    <aura:attribute name="markers" type="List"/>
+    
+            <ltng:require styles="/resource/Phillip_Leaflet/leaflet.css"
+                scripts="/resource/Phillip_Leaflet/leaflet.js"
+                 afterScriptsLoaded="{!c.jsLoaded1}"/> 
+   			
+            <div  id="map"   style = "align:right; height:500px;z-index:0 !important"> </div>
+    <!--<div>
+        <lightning:card>
+            {!v.body}
+        </lightning:card>
+    </div>-->
+</aura:component>

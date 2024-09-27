@@ -1,0 +1,17 @@
+<aura:component controller="Comltngclass" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="cname" type="string"/>
+    <aura:attribute name="clist" type="list"/>
+    <aura:handler name="init" value="{!this}" action="{!c.loadinit}"/>
+    <div id = "div1" draggable="true" ondragstart = "{!c.drag}" aura:id = "div1" >
+        <lightning:select label="commodity Name" aura:id="comname" name="commodity">
+            <option value = "None">None</option>
+            <aura:iteration items="{!v.clist}" var="cn">
+                <option value = "{!cn.Name}">{!cn.Name}</option>
+            </aura:iteration>    
+        </lightning:select>
+   </div>
+    
+   
+    
+    
+</aura:component>

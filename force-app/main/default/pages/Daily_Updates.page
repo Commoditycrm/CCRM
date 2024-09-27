@@ -1,0 +1,27 @@
+<apex:page standardController="Daily_Updates__c" lightningStylesheets="true" Extensions="Daily_Updates_Extensions">
+<html>
+<style>
+    div.header {
+          position: running(header);
+        }
+</style>        
+<body>    
+      <apex:form id="form">
+      
+          <div class="header">
+            <center><img src="{!$Resource.Commodity_CRM_Log}" width="20%"   alt="CCRM Logo"/></center>
+          </div>
+                <apex:pagemessages ></apex:pagemessages>
+            <apex:pageBlock title="Daily Updates" >
+                <apex:pageBlockSection title="Update here" columns="1" >
+                    <apex:inputField label="Select Employee" Value="{!DUpdate.Employee__c}"/>
+                    <apex:inputField label="Comments" Value="{!DUpdate.Comments__c}" style="width:50%"/>
+                </apex:pageBlockSection>  
+           <apex:pageBlockButtons location="bottom">
+              <apex:commandButton action="{!save}" value="save" rerender="form"/>
+           </apex:pageBlockButtons>
+                   
+            </apex:pageBlock>  
+      </apex:form>
+  </body></html>    
+</apex:page>

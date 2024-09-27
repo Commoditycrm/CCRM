@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="get data from generate quotation cmp" >
+    
+    <aura:attribute name = "irrate" type = "decimal"/>
+</aura:event>

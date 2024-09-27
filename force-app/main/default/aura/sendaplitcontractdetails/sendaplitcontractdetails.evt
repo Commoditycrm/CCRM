@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="" >
+    <aura:attribute name="account" type="string" description="" />
+    <aura:attribute name="commodity" type="string" description="" />
+    <aura:attribute name="location" type="string" description="" />
+</aura:event>

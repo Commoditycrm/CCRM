@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Event to remove Row" >
+    <aura:attribute name="pcomp"  type = "Price_Component__c[]" description="Use For Delete Row" />
+</aura:event>

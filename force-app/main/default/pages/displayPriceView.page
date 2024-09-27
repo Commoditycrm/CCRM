@@ -1,0 +1,6 @@
+<apex:page >
+  
+ 
+      <apex:listViews id="lv" type="Price_Component__c"/>
+ 
+</apex:page>

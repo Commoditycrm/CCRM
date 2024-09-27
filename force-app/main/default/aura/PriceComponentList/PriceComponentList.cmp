@@ -1,0 +1,23 @@
+<aura:component access="public" controller="PriceCompoenentCTRL">
+    <aura:attribute name="components" type="MD_Price_Component__c[]" access="private"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:handler name="deleteComponent" event="c:deleteComponentEvt" action="{!c.removeComponent}" />
+    <table class="borderCls">
+     <!--   <tr>
+            <th class="borderCls">Component</th> 
+            <th class="borderCls">Commodity</th>
+            <th class="borderCls">Priced Date</th> 
+            <th class="borderCls">Priced Quantity</th>
+            <th class="borderCls">Price</th> 
+            <th class="borderCls">Per</th>
+            <th class="borderCls">UoM</th> 
+            <th class="borderCls">Account</th>
+        </tr>   -->
+        <aura:iteration items="{!v.components}" var="comp">
+            <c:PriceComponentListItem componentRec="{!comp}"/>
+        </aura:iteration>
+    </table>
+    
+    <lightning:button label="Add Component" onclick="{!c.addComponent}"/>
+   <!-- <lightning:button label="Submit" onclick="{!c.submit}"/>-->
+</aura:component>

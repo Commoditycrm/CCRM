@@ -1,0 +1,334 @@
+<aura:component >
+    <aura:attribute name="account" type="Account"/>
+    <aura:attribute name="Interestaccount" type="Account"/>
+    <aura:attribute name="Offeraccount" type="Account"/>
+    <aura:attribute name="msg" type="Boolean" default="false"/>
+    <aura:attribute name="title" type="string" default =""/>
+    <aura:attribute name="object" type="string" default =""/>
+    <aura:attribute name="result" type="string" default ="No Results Found"/>
+    <aura:registerEvent name="accountSelected" type="c:AccountSelected"/> 
+    <!-- <aura:registerEvent name="accountsLoaded1" type="c:Accountevent"/> -->
+    <!--<ul class="slds-list_dotted">-->
+    <aura:if isTrue="{!v.title == 'Interest'}">	
+        <lightning:card >
+                    <aura:set attribute="title">
+                        <a onclick ="{!c.accountSelected}">{!v.account.Name}&nbsp;</a><br/>
+                    </aura:set>
+                    <p class="slds-p-horizontal_small">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-3" >
+                                <span class="slds-avatar slds-avatar--small">
+                                    <img src="{!$Resource.Buyer}"/>
+                                </span>
+                            </div>
+                            <div class="slds-col slds-size_2-of-3">
+                                
+                                {!v.account.CERM__Commodity__r.Name} &nbsp;<div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                            </div>
+                            
+                        </div>
+                    </p>
+                </lightning:card>
+        <aura:set attribute= "else">
+            <aura:if isTrue="{!v.title == 'Inventory'}">
+                <lightning:card>
+                    <aura:set attribute="title">
+                        <a onclick ="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                    </aura:set>
+                    <p class="slds-p-horizontal_small">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_1-of-3" >
+                                <span class="slds-avatar slds-avatar--small">
+                                    <img src="{!$Resource.Offer}"/>
+                                </span>
+                            </div>
+                            <div class="slds-col slds-size_2-of-3">
+                                
+                                {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                            </div>
+                            
+                        </div>
+                    </p>
+                </lightning:card>
+                <aura:set attribute= "else">
+                    <aura:if isTrue="{!v.title == 'Accounts'}">
+                        <lightning:card>
+                        <aura:set attribute="title">
+                            <a onclick ="{!c.accountSelected}">{!v.account.Name}&nbsp;</a><br/>
+                        </aura:set>
+                        <p class="slds-p-horizontal_small">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-3" >
+                                    <span class="slds-avatar slds-avatar--small">
+                                        <img src="{!$Resource.BusinessLocation}"/>
+                                    </span>
+                                </div>
+                                <div class="slds-col slds-size_2-of-3">
+                                    
+                                    {!v.account.Name} &nbsp; <div class="slds-text-color_success"></div>
+                                </div>
+                                
+                            </div>
+                        </p>
+                        </lightning:card>
+                        <aura:set attribute= "else">
+                            <aura:if isTrue="{!v.title == 'Offer'}">
+                                <lightning:card>
+                                    <aura:set attribute="title">
+                                        <a onclick ="{!c.accountSelected}">{!v.account.Name}&nbsp;</a><br/>
+                                    </aura:set>
+                                    <p class="slds-p-horizontal_small">
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-3" >
+                                                <span class="slds-avatar slds-avatar--small">
+                                                    <img src="{!$Resource.Seller}"/>
+                                                </span>
+                                            </div>
+                                            <div class="slds-col slds-size_2-of-3">
+                                                
+                                                {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                            </div>
+                                            
+                                        </div>
+                                    </p>
+                                </lightning:card>
+                                <aura:set attribute= "else">
+                                    <aura:if isTrue="{!v.title == 'Contracts'}">
+                                        <table >
+                                            <th><li><a onclick="{!c.accountSelected}">{!v.account.Name}&nbsp;({!v.account.CERM__Commodity__r.Name})</a></li></th>
+                                        </table>
+                                        <aura:set attribute = "else">
+                                            <aura:if isTrue="{!v.title == 'Refinery'}">
+                                                <lightning:card>
+                                                    <aura:set attribute="title">
+                                                         <a onclick ="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                    </aura:set>
+                                                    <p class="slds-p-horizontal_small">
+                                                        <div class="slds-grid slds-gutters">
+                                                            <div class="slds-col slds-size_1-of-3" >
+                                                                <span class="slds-avatar slds-avatar--small">
+                                                                    <img src="{!$Resource.Refinery}"/>
+                                                                </span>
+                                                            </div>
+                                                            <div class="slds-col slds-size_2-of-3">
+                                                               
+                                                                {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </p>
+                                                </lightning:card>
+                                                <aura:set attribute = "else">
+                                                    <aura:if isTrue="{!v.title == 'Rail Terminal'}">
+                                                        <lightning:card>
+                                                            <aura:set attribute="title">
+                                                                <a onclick="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                            </aura:set>
+                                                            <p class="slds-p-horizontal_small">
+                                                                <div class="slds-grid slds-gutters">
+                                                                    <div class="slds-col slds-size_1-of-3">
+                                                                        <span class="slds-avatar slds-avatar--small">
+                                                                            <img src="{!$Resource.Rail}"/>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_2-of-3">
+                                                                        
+                                                                       {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </p>
+                                                        </lightning:card>
+                                                        <aura:set attribute = "else">
+                                                            <aura:if isTrue="{!v.title == 'Product Terminal'}">
+                                                                <lightning:card>
+                                                                    <aura:set attribute="title">
+                                                                        <a onclick="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                                    </aura:set>
+                                                                    <p class="slds-p-horizontal_small">
+                                                                        <div class="slds-grid slds-gutters">
+                                                                            <div class="slds-col slds-size_1-of-3">
+                                                                                <span class="slds-avatar slds-avatar--small">
+                                                                                    <img src="{!$Resource.Product_Terminal}"/>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="slds-col slds-size_2-of-3">
+                                                                                
+                                                                               {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                    </p>
+                                                                </lightning:card>
+                                                                <aura:set attribute = "else">
+                                                                    
+                                                                    <aura:if isTrue="{!and(v.title == 'ALL', v.account.CERM__Business_Location__r.CERM__Type__c == 'Product Terminal')}" >
+                                                                        <lightning:card>
+                                                                            <aura:set attribute="title">
+                                                                                <a onclick="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                                            </aura:set>
+                                                                            <p class="slds-p-horizontal_small">
+                                                                                <div class="slds-grid slds-gutters">
+                                                                                    <div class="slds-col slds-size_1-of-3">
+                                                                                        <span class="slds-avatar slds-avatar--small">
+                                                                                            <img src="{!$Resource.Product_Terminal}"/>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div class="slds-col slds-size_2-of-3"> 
+                                                                                        {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
+                                                                            </p>
+                                                                        </lightning:card>
+                                                                        <aura:set attribute = "else">
+                                                                            
+                                                                            <aura:if isTrue="{!and(v.title == 'ALL', v.account.CERM__Business_Location__r.CERM__Type__c == 'Rail Terminal')}"  >
+                                                                                <lightning:card>
+                                                                                    <aura:set attribute="title">
+                                                                                        <a onclick="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                                                    </aura:set>
+                                                                                    <p class="slds-p-horizontal_small">
+                                                                                        <div class="slds-grid slds-gutters">
+                                                                                            <div class="slds-col slds-size_1-of-3">
+                                                                                                <span class="slds-avatar slds-avatar--small">
+                                                                                                    <img src="{!$Resource.Rail}"/>
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <div class="slds-col slds-size_2-of-3">
+                                                                                                
+                                                                                                {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                                            </div>
+                                                                                            
+                                                                                        </div>
+                                                                                    </p>
+                                                                                </lightning:card>
+                                                                                <aura:set attribute = "else">
+                                                                                    
+                                                                                    <aura:if isTrue="{!and(v.title == 'ALL', v.account.CERM__Business_Location__r.CERM__Type__c == 'Refinery')}"  >
+                                                                                        
+                                                                                        <lightning:card>
+                                                                                            <aura:set attribute="title">
+                                                                                                <a onclick="{!c.accountSelected}">{!v.account.CERM__Business_Location__r.Name}&nbsp;</a><br/>
+                                                                                            </aura:set>
+                                                                                            <p class="slds-p-horizontal_small">
+                                                                                                <div class="slds-grid slds-gutters">
+                                                                                                    <div class="slds-col slds-size_1-of-3">
+                                                                                                        <span class="slds-avatar slds-avatar--small">
+                                                                                                            <img src="{!$Resource.Refinery}"/>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="slds-col slds-size_2-of-3">
+                                                                                                       {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                                                    </div>
+                                                                                                    
+                                                                                                </div>
+                                                                                            </p>
+                                                                                        </lightning:card>
+                                                                                        <aura:set attribute = "else">
+                                                                                            
+                                                                                            <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Interest')}"  >
+                                                                                                
+                                                                                                <lightning:card>
+                                                                                                    <aura:set attribute="title">
+                                                                                                        <a onclick ="{!c.accountSelected}">{!v.account.Name}&nbsp;</a><br/>
+                                                                                                    </aura:set>
+                                                                                                    <p class="slds-p-horizontal_small">
+                                                                                                        <div class="slds-grid slds-gutters">
+                                                                                                            <div class="slds-col slds-size_1-of-3" >
+                                                                                                                <span class="slds-avatar slds-avatar--small">
+                                                                                                                    <img src="{!$Resource.Buyer}"/>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="slds-col slds-size_2-of-3">
+                                                                                                                
+                                                                                                                {!v.account.CERM__Commodity__r.Name} &nbsp; <div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                                                            </div>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </p>
+                                                                                                </lightning:card>
+                                                                                                <aura:set attribute = "else">
+                                                                                            
+                                                                                            <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Offer')}"  >
+                                                                                                
+                                                                                                <lightning:card>
+                                                                                                    <aura:set attribute="title">
+                                                                                                        <a onclick ="{!c.accountSelected}">{!v.account.Name}&nbsp;</a><br/>
+                                                                                                    </aura:set>
+                                                                                                    <p class="slds-p-horizontal_small">
+                                                                                                        <div class="slds-grid slds-gutters">
+                                                                                                            <div class="slds-col slds-size_1-of-3" >
+                                                                                                                <span class="slds-avatar slds-avatar--small">
+                                                                                                                    <img src="{!$Resource.Seller}"/>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="slds-col slds-size_2-of-3">
+                                                                                                                
+                                                                                                                {!v.account.CERM__Commodity__r.Name} &nbsp;<div class="slds-text-color_success">${!v.account.CERM__Price__c}</div>
+                                                                                                            </div>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </p>
+                                                                                                </lightning:card>
+                                                                                                <aura:set attribute = "else">
+                                                                                            
+                                                                                            <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Accounts')}"  >
+                                                                                                
+                                                                                                <lightning:card>
+                                                                                                    <aura:set attribute="title">
+                                                                                                        <a onclick ="{!c.accountSelected}" >{!v.account.Name}&nbsp;</a><br/>
+                                                                                                    </aura:set>
+                                                                                                    <p class="slds-p-horizontal_small">
+                                                                                                        <div class="slds-grid slds-gutters">
+                                                                                                            <div class="slds-col slds-size_1-of-3" >
+                                                                                                                <span class="slds-avatar slds-avatar--small">
+                                                                                                                    <img src="{!$Resource.BusinessLocation}"/>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="slds-col slds-size_2-of-3">
+                                                                                                                
+                                                                                                                {!v.account.Name} &nbsp;<div class="slds-text-color_success"></div>
+                                                                                                            </div>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </p>
+                                                                                                </lightning:card>
+                                                                                                
+                                                                                            </aura:if>
+                                                                                        </aura:set>
+                                                                                            </aura:if>
+                                                                                                    
+                                                                                        </aura:set>
+                                                                                            </aura:if>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                    
+                                                                                </aura:set>
+                                                                            </aura:if>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                    
+                                                                    
+                                                                    
+                                                                    
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                    
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    
+    <!-- </ul> -->
+</aura:component>

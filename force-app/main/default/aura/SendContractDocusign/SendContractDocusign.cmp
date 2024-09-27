@@ -1,0 +1,37 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="getItem" type="Contract_Item__c"/>
+                <lightning:outputField fieldName="CERM__Contract_Item__c" value="{!v.getItem.Id}" />
+        <force:outputField value="{!v.getItem.Id}"/>
+    <table class="bordered">
+                <thead>
+                    <tr>              
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Charge Type</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Product</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Quantity</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">UoM</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Unit Price</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Amount</td>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading"/>
+                        <td class="header-table-heading" bgcolor="#C0C0C0">Lot#</td>
+                    </tr>
+                </thead>
+    </table>
+
+</aura:component>

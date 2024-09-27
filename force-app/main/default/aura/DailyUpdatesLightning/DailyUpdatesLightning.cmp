@@ -1,0 +1,52 @@
+<aura:component controller = "DailyUpdatesLightningController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute Name="isSave" type="boolean" default="true"/>
+    
+    <lightning:card variant="Narrow" title="Daily Updates" iconName="action:update_status">
+        <div class="slds-p-around_small">  <!-- padding, to bring white space-->
+            <aura:if isTrue="{!v.Spinner}"> 
+                <div aura:id="spinnerId" class="slds-spinner_container slds-is-fixed"> <!-- Spinner, Loading -->
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative " role="status">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div> 
+                        
+                    </div>
+                </div> 
+                
+            </aura:if>
+        </div>
+        
+            <h3 class="slds-section-title--divider" >Update Here</h3> 
+            <div class="slds-grid slds-grid_vertical-align-start slds-p-left_none">
+                <div class="slds-col" style="width:50em">
+                </div>
+                
+                <div class="slds-col" style="width:30em">
+        <lightning:recordEditForm aura:id="updateid" objectApiName="CERM__Daily_Updates__c">
+                <!-- the messages component is for error messages -->
+                <lightning:messages />
+                
+                <lightning:layout pullToBoundary="medium" multipleRows="false">
+                    <lightning:layoutItem  flexibility="auto" padding="horizontal-medium" >
+                                <lightning:inputField aura:id="Employee" fieldName="CERM__Employee__c" />
+                                <lightning:inputField aura:id="Comments" fieldName="CERM__Comments__c" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:recordEditForm>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                <div class="slds-col" style="width:50em">
+                </div>
+
+        </div><br/>
+                    <div align="center" >
+               <lightning:button class="slds-button slds-button_brand"  name="save" onclick="{!c.validation}">Save</lightning:button>
+                <lightning:button class="slds-button slds-button_brand"  
+                                  name="clear"  onclick="{!c.clearcomponent}">Clear</lightning:button>
+                   
+            </div>
+
+
+     </lightning:card>
+</aura:component>

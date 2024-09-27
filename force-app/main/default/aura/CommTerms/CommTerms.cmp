@@ -1,0 +1,40 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="paymentTerm" type="string" />
+    <aura:attribute name="titleTransfer" type="string" />
+    <aura:attribute name="governingWeights" type="string" />
+    <aura:attribute name="governingGrades" type="string" />
+    <aura:attribute name="governingTerms" type="string" />
+    <aura:attribute name="tolerance" type="string" />
+    <aura:attribute name="fcl" type="string" />
+    <aura:attribute name="bags" type="string" />
+    <aura:attribute name="weightperBag" type="string" />
+    <aura:attribute name="packMatweight" type="string" />
+    <aura:attribute name="selectedBagRecord" type="sobject" />
+    <aura:attribute name="selectedDiscountRecord" type="sobject" />
+   	<div class="slds-grid slds-wrap">
+        <div class="slds-col">
+            <div style = "width:78%;padding : 25px 0px 25px 25px">
+                <lightning:input name="govweights" type="string" value="{!v.governingWeights}" label="Governing Weights" />
+                <lightning:input name="tolerance" type="string" value="{!v.tolerance}" label="Tolerance" />
+                <lightning:input name="fcl" type="string" value="{!v.fcl}" label="FCL" />
+				<c:customLookup objectAPIName="CERM__MD_Unit_of_Measure__c" IconName="standard:account" selectedRecord="{!v.selectedBagRecord}" label="Bag UoM"/>
+            </div>
+        </div>
+        <div class="slds-col">
+            <div style = "width:78%;padding : 25px 0px 0px 25px">
+                <lightning:input name="payTerm" type="string" value="{!v.paymentTerm}" label="PaymentTerm" />
+                <lightning:input name="govgrades" type="string" value="{!v.governingGrades}" label="Governing Grades" />    
+                <lightning:input name="bags" type="string" value="{!v.bags}" label="Bags/Tote" />        
+                <lightning:input name="pacmatwt" type="string" value="{!v.packMatweight}" label="Package Material Weight" />
+            </div>
+        </div>
+        <div class="slds-col">
+            <div style = "width:78%;padding : 25px 25px 0px 25px">
+                <lightning:input name="tiltTran" type="string" value="{!v.titleTransfer}" label="Title Transfer" />
+                <lightning:input name="govterms" type="string" value="{!v.governingTerms}" label="Governing Terms" />        
+                <lightning:input name="wtperbag" type="string" value="{!v.weightperBag}" label="Weight Per Bag" />
+                <c:customLookup objectAPIName="CERM__Schedule__c" IconName="standard:account" selectedRecord="{!v.selectedDiscountRecord}" label="Discount Schedule"/>       
+            </div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,11 @@
+.THIS .slds-card {
+    position: relative;
+    padding: 0;
+    width: 17rem !important;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(221, 219, 218);
+    border-radius: -2.75rem;
+    background-clip: padding-box;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+
+}

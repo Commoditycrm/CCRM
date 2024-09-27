@@ -1,0 +1,26 @@
+<aura:component >
+	<div class="slds-grid slds-gutters">
+        
+<div class="slds-col">
+<span>1dsjgfjds hgfkjshdkjadhfkjasg dfjagsdh dfhagsdfh gasdf hadsfgh asdf</span>
+</div>
+<div class="slds-col">
+<span>2</span>
+</div>
+<div class="slds-col">
+<span>3</span>
+</div>
+</div>
+    <div class="slds-grid slds-gutters">
+        
+<div class="slds-col">
+<span>1</span>
+</div>
+<div class="slds-col">
+<span>2</span>
+</div>
+<div class="slds-col">
+<span>3</span>
+</div>
+</div>
+</aura:component>

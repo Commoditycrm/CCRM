@@ -1,0 +1,10 @@
+<aura:component controller="sendSMS" implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   
+    <aura:attribute name="msg" type="string"/>
+    
+    <div align = "center" style = "font-size:20px;">
+        <br/>
+    	<ui:outputText value="{!v.msg}"/> 
+    </div>
+</aura:component>

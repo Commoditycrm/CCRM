@@ -1,0 +1,33 @@
+<apex:page applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false">
+  hi - <c:PdfLogoHeader />
+              
+                Hiiii 
+                
+       <c:PdfLogoFooter />
+  
+  <html>
+  
+      <head>
+          <style>
+          @page{
+                    
+                    @bottom-center {
+                        content: element(footer);
+                    }
+                    @top-left{
+                        content: element(header);
+                    }
+                    margin-top: 90px;
+                    margin-bottom: 100px;
+                }
+           </style>
+       </head>  
+     
+  <body> 
+  
+  
+
+  
+</body>
+</html>
+</apex:page>

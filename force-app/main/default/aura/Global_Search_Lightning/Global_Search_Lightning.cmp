@@ -1,0 +1,176 @@
+<aura:component controller="GlobalSearchController_Lightning" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<aura:attribute name="searchText" type="String" default=""/>
+    <aura:attribute name="accountlist" type="Object[]" access="public" />
+    <aura:attribute name="applist" type="Object[]" access="public" />
+    <aura:attribute name="itemlist" type="Object[]" access="public" />
+    <aura:attribute name="pcomplist" type="Object[]" access="public" />
+
+    <lightning:card variant="Narrow" title="Global Search" iconName="action:update_status">
+                <div class="slds-p-around_small">  <!-- padding, to bring white space-->
+                </div>
+                <h3 class="slds-section-title--divider" >Search Contract Items</h3> 
+             <div class="slds-grid slds-grid_vertical-align-start slds-p-left_none">
+               	 
+                 <div class="slds-col" style="width:50em">
+                 </div>         
+               
+                 <div class="slds-col" style="width:50em">
+                         <div class="slds-form-element slds-lookup" data-select="single">
+                            <div class="slds-form-element__control">
+                                <div class="slds-input-has-icon slds-input-has-icon--right">
+                                    <ui:inputText label="Search Contract Items" value="{!v.searchText}" class="slds-lookup__search-input slds-input" placeholder="Search" /><br/>
+                                  <lightning:buttonIcon iconName="utility:search" variant="bare" onclick="{! c.handleClick }" alternativeText="Search" class="slds-input__icon" />
+                                  
+                                </div>
+                            </div>
+                         </div>
+                		  
+                 </div>
+
+                <div class="slds-col" style="width:50em">
+                </div>
+        </div>
+        <aura:if isTrue="{!not(empty(v.accountlist))}">
+        <div>  
+                            <div class="slds-section slds-is-open">
+                              <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Account [{!v.accountlist.length}]</span>
+                              </h3>
+                              <div aria-hidden="false" class="slds-section__content">                              
+                                  <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+                                        <thead> 
+                                        <tr class="slds-line-height_reset">
+												<th class="" scope="col">
+                                                  <div class="slds-truncate" title="Name">Name</div>
+                                                </th>
+                                            </tr>
+                                      </thead>
+                                <aura:iteration items="{!v.accountlist}" var="rcd">  
+                                    <tbody>
+											<tr class="slds-hint-parent">
+											  <th data-label="Name">
+												<div class="slds-truncate" title="Name"><a href="{! '/lightning/r/' + rcd.Id + '/view'}"> {!rcd.Name}</a></div>
+											  </th>
+                                        </tr>
+                                    </tbody>
+                                  </aura:iteration>
+                                  </table>
+                              </div>
+							</div>
+                          </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!not(empty(v.applist))}">
+        <div>  
+                            <div class="slds-section slds-is-open">
+                              <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Application Link [{!v.applist.length}]</span>
+                              </h3>
+                              <div aria-hidden="false" class="slds-section__content">                              
+                                  <ul>  
+                                      <table style="width:20%;" align="left" >
+                                          <tr>
+                                            <th style="font-size11px;width:8%;vertical-align:top;text-align:left;font-weight: bold;">Name</th>
+                                            <th style="font-size11px;width:8%;vertical-align:top;text-align:left;font-weight: bold;">Id</th>  
+                                            </tr>
+                                      </table>
+
+                                <aura:iteration items="{!v.applist}" var="rcd">  
+                                    <tbody>
+											<tr class="slds-hint-parent">
+											  <th data-label="Name">
+												<div class="slds-truncate" title="Name"><a href="{! '/lightning/r/' + rcd.Id + '/view'}"> {!rcd.Name}</a></div>
+											  </th>
+                                        </tr>
+                                    </tbody>
+                                  </aura:iteration>
+                              </ul>
+                              </div>
+							</div>
+                          </div>
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.itemlist))}">
+        <div>  
+                            <div class="slds-section slds-is-open">
+                              <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Contract Item [{!v.itemlist.length}]</span>
+                              </h3>
+                              <div aria-hidden="false" class="slds-section__content">                              
+                                    
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+                                        <thead> 
+                                        <tr class="slds-line-height_reset">
+												<th class="" scope="col">
+                                                  <div class="slds-truncate" title="Name">Name</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                  <div class="slds-truncate" title="Account">Account</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                  <div class="slds-truncate" title="Commodity">Commodity</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                  <div class="slds-truncate" title="Open for/to Deliver">Open for/to Deliver</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                  <div class="slds-truncate" title="Action">Action</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                  <div class="slds-truncate" title="Schedule Action">Action</div>
+                                                </th>
+                                            </tr>
+                                          </thead>
+                                        
+                                <aura:iteration items="{!v.itemlist}" var="rcd">  
+                                    <tbody>
+											<tr class="slds-hint-parent">
+											  <th data-label="Name">
+												<div class="slds-truncate" title="Name"><a href="{! '/lightning/r/' + rcd.Id + '/view'}"> {!rcd.Name}</a></div>
+                                                  
+											  </th>
+											  <td data-label="Account">
+												<div class="slds-truncate" title="Account"><a href="{! '/lightning/r/' + rcd.CERM__Account__c + '/view'}">{!rcd.CERM__Account__c}</a></div>
+                                                  
+											  </td>
+											  <td data-label="Commodity">
+                                                  <div class="slds-truncate" title="Commodity"><a href="{! '/lightning/r/' + rcd.CERM__Commodity__c + '/view'}">{!rcd.CERM__Commodity__c}</a></div>
+											  </td>
+											  <td data-label="Open for/to Deliver">
+												<div class="slds-truncate" title="Open for/to Deliver"><a href="{! '/lightning/r/' + rcd.CERM__Pos_Unapplied__c + '/view'}">{!rcd.CERM__Pos_Unapplied__c}</a></div>
+											  </td>
+											  <td data-label="Action">
+												<div class="slds-truncate" title="Action"><a href="{! '/apex/CreateTradeTicketsCloneModify?contractitemid=' + rcd.Id }">Create Ticket</a></div>
+											  </td>
+											  <td data-label="Schedule Action">
+												<div class="slds-truncate" title="Schedule Action"><a href="{!'/apex/CreateScheduleLoad?CId=' + rcd.Id}">Schedule a Load</a></div>
+											  </td>
+                                              </tr>
+										</tbody> 
+                                  </aura:iteration>
+                                        </table>
+                              </div>
+							</div>
+                          </div>
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.pcomplist))}">
+        <div>  
+                            <div class="slds-section slds-is-open">
+                              <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Price Component [{!v.pcomplist.length}]</span>
+                              </h3>
+                              <div aria-hidden="false" class="slds-section__content">                              
+                                  <ul>  
+                                <aura:iteration items="{!v.pcomplist}" var="rcd">  
+                                    <li>  
+                                      <a href="{! '/lightning/r/' + rcd.Id + '/view'}">  
+                                        <p>{!rcd.Name}</p>  
+                                      </a>  
+                                    </li>  
+                                  </aura:iteration>
+                              </ul>
+                              </div>
+							</div>
+                          </div>
+        </aura:if>
+        </lightning:card>
+</aura:component>

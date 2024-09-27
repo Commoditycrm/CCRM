@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="account" Type="Account"/>
+    <aura:attribute name = "title" type = "string" />
+     <aura:attribute name = "object" type = "string" />
+</aura:event>

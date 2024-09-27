@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="20px" viewBox="0 0 25 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>trending-arrow-icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Community" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Working-Final" transform="translate(-861.000000, -429.000000)" stroke="#A5A5A5" stroke-width="2">
+            <g id="Trending-Topic" transform="translate(862.000000, 427.000000)">
+                <g id="trending-arrow-icon" transform="translate(0.000000, 3.000000)">
+                    <polyline id="Path" points="0 18 8.52586207 8.79545455 11.5 13.2954545 23 0"></polyline>
+                    <polyline id="Path" points="18 1.30434783 23 0 22.1666667 5"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

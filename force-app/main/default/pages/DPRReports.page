@@ -1,0 +1,65 @@
+<apex:page >
+
+  <apex:form >
+
+    <div style = "float:left;padding-top:10px;padding-left:100px;text-align:center;">
+             
+                  <h1 style = "width:250px;font-size:25px;"> Daily Position Report</h1> <br/><br/>
+                  
+                  
+                  <div style= "float:left;width:350px;">
+                      
+                     <h1 style = "width:150px;font-size:15px;"> Total Owned Inventory</h1> <br/><br/> 
+                     <analytics:reportChart reportId="00O3700000293yt" size="small">
+                     </analytics:reportChart>
+                     <apex:outputLink value="/00O3700000293yt" id="theLink" target="_blank">View Report</apex:outputLink>
+                       
+                  </div>
+                  
+                  
+                  
+                  <div style= "float:right;width:350px;"> 
+                      <h1 style = "width:150px;font-size:15px;"> Sold UnPriced Inventory</h1> <br/><br/>
+                      <analytics:reportChart reportId="00O370000029427" size="small">
+                      </analytics:reportChart>
+                      <apex:outputLink value="/00O370000029427" id="theLink1" target="_blank">View Report</apex:outputLink>
+                  </div>
+                   <br/><br/>
+                   
+                   
+                  <div style= "float:left;width:350px;">
+                      <h1 style = "width:150px;font-size:15px;"> Purchase UnDelivered Priced Futures </h1> <br/><br/> 
+                      <analytics:reportChart reportId="00O37000002941s" size="small">
+                      </analytics:reportChart>
+                      <apex:outputLink value="/00O37000002941s"  target="_blank">View Report</apex:outputLink>
+                  </div> 
+                  
+                  <div style= "float:right;width:350px;">
+                      <h1 style = "width:150px;font-size:15px;"> Sales UnDelivered Priced Futures </h1> <br/><br/> 
+                      <analytics:reportChart reportId="00O37000002942H" size="small">
+                      </analytics:reportChart>
+                      <apex:outputLink value="/00O37000002942H" target="_blank">View Report</apex:outputLink>
+                  </div>
+                  <br/><br/>
+                  
+                  
+                   <div style="width:350px;float:left;"> 
+                      <h1 style = "width:150px;font-size:15px;"> Purchase UnDelivered Priced Basis </h1> <br/><br/> 
+                      <analytics:reportChart reportId="00O37000002942q" size="small">
+                      </analytics:reportChart>
+                      <apex:outputLink value="/00O37000002942q" target="_blank">View Report</apex:outputLink>
+                  </div>
+                  
+                   <div style= "float:right;width:350px;">
+                      <h1 style = "width:150px;font-size:15px;"> Sales UnDelivered Priced Basis </h1> <br/><br/> 
+                      <analytics:reportChart reportId="00O37000002942v" size="small">
+                      </analytics:reportChart>
+                      <apex:outputLink value="/00O37000002942v" target="_blank">View Report</apex:outputLink>
+                  </div>
+                  
+
+                  
+          </div>
+
+   </apex:form>
+</apex:page>

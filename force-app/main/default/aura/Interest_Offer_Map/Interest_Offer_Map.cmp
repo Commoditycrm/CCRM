@@ -1,0 +1,90 @@
+<aura:component controller = "lightningMapController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   <!-- <aura:handler name = "init" value="{!this}" action = "{!c.doinit}"/>-->
+    <aura:attribute name="interestlist" type="Bid__c[]"/>
+    <aura:attribute name="Offerlist" type="Offer__c[]"/>
+    <aura:attribute name="inventorylist" type="BL_Commodity__c[]"/>
+    <aura:attribute name="itemlist" type="Contract_Item__c[]"/>
+    <aura:attribute name="Accountlist" type="Account[]"/>
+    <aura:attribute name="title" type="string" default =""/>
+    <aura:attribute name="selectedvalue" type="string" default =""/>
+    <aura:attribute name="Livalue" type="string" default =""/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="intmsg" type="boolean" default="false"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container slds-is-fixed">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative " role="status">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div> 
+                
+            </div>
+        </div> 
+        
+    </aura:if>
+    <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+        <div class="slds-form-element">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <ui:inputSelect aura:Id="mapId" multiple="false" label="Select Map" change = "{!c.changevalue}">
+                        <ui:inputSelectOption label="Interest" text="Interest"/>
+                        <ui:inputSelectOption label="Offer" text="Offer"/>
+                    </ui:inputSelect>
+                </div>
+                
+                <div class="slds-col">
+                    <ui:inputSelect  aura:id="Listview"  label="Views" class="slds-select"  change="{!c.onInterestchange}">
+                        <ui:inputSelectOption label="All" text="All"/>
+                        <ui:inputSelectOption label="This Month" text="This Month"/>
+                        <ui:inputSelectOption label="Last Month" text="Last Month"/>
+                    </ui:inputSelect>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="demo-only" style="display: flex;">
+        
+        <div class="leftcol-wrap slds-col slds-size_1-of-4">
+            <lightning:card title="{!v.selectedvalue}">
+                <div class="slds-scrollable_y" style="height: 34em;  width: 20rem; ">
+                    <div class="slds-card">
+                        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                            <div class="slds-size_1-of-1">
+                                <div class="slds-text-align_center slds-m-around_x-small">
+                                    <aura:if isTrue = "{!v.title == 'Interest'}">
+                                        <div class = "slds-text-heading_medium"> {!v.Livalue} </div><br/>
+                                        <aura:iteration items="{!v.interestlist}" var="account">
+                                            <c:Interest_Offer_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                        </aura:iteration>
+                                        <aura:set attribute= "else">
+                                            <aura:if isTrue="{!v.title == 'Offer'}">
+                                                <div class = "slds-text-heading_medium">{!v.Livalue}</div><br/>
+                                                <aura:iteration items="{!v.Offerlist}" var="account">
+                                                    <c:Interest_Offer_Map_Record account="{!account}" msg="{!v.msg}" title="{!v.title}"/>
+                                                </aura:iteration>
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                                <aura:if isTrue = "{!v.intmsg == True}">
+                                    <div style="width:20.5em" align ="center">
+                                        <ui:message title="No Results Found" severity="info" closable="false">
+                                        </ui:message>
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:card>
+        </div><!--leftcol-wrap-->
+        
+        <div class="map-wrap slds-col slds-size_2-of-3">
+            <c:LightningmapResource/>
+            <div class="map" id="map" aura:id="map"></div>
+        </div><!--end map-wrap-->
+    </div>
+</aura:component>

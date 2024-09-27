@@ -1,0 +1,296 @@
+<aura:component >
+    <aura:attribute type="Account" name="SelectedAccount"/>
+    <aura:attribute name="title" type="string" default =""/>
+    <aura:attribute name="object" type="string" default =""/>
+    <aura:attribute name="hrefvalue" type="string" default =""/>
+    
+    <aura:attribute name="keyList" type="List"/>
+    <aura:attribute name="CFITEMResult" type="map"/>
+    <aura:attribute name="value" type="string"/>
+    
+    <aura:attribute name="keyListSell" type="List"/>
+    <aura:attribute name="CFITEMSellResult" type="map"/>
+    <aura:attribute name="valueSell" type="string"/>
+    
+    <aura:attribute name="keyListInterest" type="List"/>
+    <aura:attribute name="InterestResult" type="map"/>
+    <aura:attribute name="valueInterest" type="string"/>
+    
+    <aura:attribute name="keyListOffer" type="List"/>
+    <aura:attribute name="OfferResult" type="map"/>
+    <aura:attribute name="valueOffer" type="string"/>
+    
+    <aura:attribute name="mapValues" type="object" /> 
+    <aura:attribute name="mapValuesSell" type="object" />
+    <aura:attribute name="mapValuesInterest" type="object" />
+    <aura:attribute name="mapValuesOffer" type="object" />
+    
+    <aura:attribute type="Offer__c[]" name="bestoffers"/>
+    <aura:attribute type="Bid__c[]" name="bestinterest"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--<aura:handler name="change" value="{!v.SelectedAccount}" action="{!c.doInit}"/>-->
+    <aura:registerEvent name="Close" type="c:Map_for_Phillip_Open_Panel"/> 
+    
+    <div class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-is-open" aura:id="panel1" aria-hidden="false">
+        <div class="slds-panel__header slds-panel__header_align-center">
+            <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" style="align:center"><a href="{!'https://commodityforce-dev-ed.lightning.force.com/'+v.SelectedAccount.Id}" target="_blank">{!v.SelectedAccount.Name}</a></h2>
+            
+            <lightning:buttonIcon class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" iconName="utility:close" size="medium"  onclick="{! c.Close}" variant="bare" alternativeText="Close" />
+            
+        </div>
+        <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Accounts')}">
+            <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                <div class="slds-panel__body">
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                
+                                <span class="slds-truncate" title="Open Buy Contracts">Open Buy Contracts</span>
+                            </button>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                            <p><aura:iteration items="{!v.mapValues}"  var="mapKey" indexVar="key">                 
+                                <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                </aura:iteration></p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="slds-panel__body">
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                
+                                <span class="slds-truncate" title="Open Sell Contracts">Open Sell Contracts</span>
+                            </button>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                            <p><aura:iteration items="{!v.mapValuesSell}"  var="mapKey" indexVar="key">                 
+                                <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                </aura:iteration></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-panel__body">
+                    
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                
+                                <span class="slds-truncate" title="Open Bids">Open Bids</span>
+                            </button>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                            <p><aura:iteration items="{!v.mapValuesInterest}"  var="mapKey" indexVar="key">                 
+                                <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                </aura:iteration></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-panel__body">
+                    <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                
+                                <span class="slds-truncate" title="Open Offers">Open Offers</span>
+                            </button>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                            <p><aura:iteration items="{!v.mapValuesOffer}"  var="mapKey" indexVar="key">                 
+                                <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                </aura:iteration></p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Interest')}">
+                    <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                        <div class="slds-panel__body">
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title">
+                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                        
+                                        <span class="slds-truncate" title="Best Offers">Best Offers by price</span>
+                                    </button>
+                                </h3>
+                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                    <p>
+                                        <aura:iteration items="{!v.bestoffers}"  var="off" >                 
+                                            <strong><div>
+                                                <table>
+                                                    <tr><th> Offer #</th> <td><a href="{!'https://commodityforce-dev-ed.lightning.force.com/'+off.Id}" target="_blank">{!off.Name}</a></td></tr>
+                                                    <tr><th>Price</th><td class="slds-text-color_success">${!off.CERM__Price__c}</td></tr>
+                                                    <tr><th>Available Quantity</th><td>{!off.CERM__Open_Quantity__c}</td></tr>
+                                                </table>  </div><br/></strong>                
+                                        </aura:iteration>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and(v.title == 'ALL', v.object == 'Offer')}">
+                            <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                                <div class="slds-panel__body">
+                                    <div class="slds-section slds-is-open">
+                                        <h3 class="slds-section__title">
+                                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                
+                                                <span class="slds-truncate" title="Best Interests">Best Interest by price</span>
+                                            </button>
+                                        </h3>
+                                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                            <p>
+                                                <aura:iteration items="{!v.bestinterest}"  var="bid" >                 
+                                                    <strong><div>
+                                                        <table>
+                                                            <tr><th> Interest #</th> <td><a href="{!'https://commodityforce-dev-ed.lightning.force.com/'+bid.Id}" target="_blank">{!bid.Name}</a></td></tr>
+                                                            <tr><th>Price</th><td class="slds-text-color_success">${!bid.CERM__Price__c}</td></tr>
+                                                            <tr><th>Available Quantity</th><td>{!bid.CERM__Open_Quantity_del__c}</td></tr>
+                                                        </table>  </div><br/></strong>                
+                                                </aura:iteration>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.title == 'Offer'}">
+                                    <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                                        <div class="slds-panel__body">
+                                            <div class="slds-section slds-is-open">
+                                                <h3 class="slds-section__title">
+                                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                        
+                                                        <span class="slds-truncate" title="Best Interests">Best Interest by price</span>
+                                                    </button>
+                                                </h3>
+                                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                    <p>
+                                                        <aura:iteration items="{!v.bestinterest}"  var="bid" >                 
+                                                            <strong><div>
+                                                                <table>
+                                                                    <tr><th> Interest #</th> <td><a href="{!'https://commodityforce-dev-ed.lightning.force.com/'+bid.Id}" target="_blank">{!bid.Name}</a></td></tr>
+                                                                    <tr><th>Price</th><td class="slds-text-color_success">${!bid.CERM__Price__c}</td></tr>
+                                                                    <tr><th>Available Quantity</th><td>{!bid.CERM__Open_Quantity_del__c}</td></tr>
+                                                                </table>  </div><br/></strong>                
+                                                        </aura:iteration>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!v.title == 'Interest'}">
+                                            <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                                                <div class="slds-panel__body">
+                                                    <div class="slds-section slds-is-open">
+                                                        <h3 class="slds-section__title">
+                                                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                                
+                                                                <span class="slds-truncate" title="Best Offers">Best Offers by price</span>
+                                                            </button>
+                                                        </h3>
+                                                        <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                            <p>
+                                                                <aura:iteration items="{!v.bestoffers}"  var="off" >                 
+                                                                    <strong><div>
+                                                                        <table>
+                                                                            <tr><th> Offer #</th> <td><a href="{!'https://commodityforce-dev-ed.lightning.force.com/'+off.Id}" target="_blank">{!off.Name}</a></td></tr>
+                                                                            <tr><th>Price</th><td class="slds-text-color_success">${!off.CERM__Price__c}</td></tr>
+                                                                            <tr><th>Available Quantity</th><td>{!off.CERM__Open_Quantity__c}</td></tr>
+                                                                        </table>  </div><br/></strong>                
+                                                                </aura:iteration>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                            <aura:set attribute="else">
+                                                <aura:if isTrue="{!v.title == 'Accounts'}">
+                                                    <div class="slds-scrollable" style=" padding-left: 20px; height: 28.2rem; width: 20rem;">
+                                                        <div class="slds-panel__body">
+                                                            <div class="slds-section slds-is-open">
+                                                                <h3 class="slds-section__title">
+                                                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                                        
+                                                                        <span class="slds-truncate" title="Open Buy Contracts">Open Buy Contracts</span>
+                                                                    </button>
+                                                                </h3>
+                                                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                                    <p><aura:iteration items="{!v.mapValues}"  var="mapKey" indexVar="key">                 
+                                                                        <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                                                        </aura:iteration></p>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="slds-panel__body">
+                                                            <div class="slds-section slds-is-open">
+                                                                <h3 class="slds-section__title">
+                                                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                                        
+                                                                        <span class="slds-truncate" title="Open Sell Contracts">Open Sell Contracts</span>
+                                                                    </button>
+                                                                </h3>
+                                                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                                    <p><aura:iteration items="{!v.mapValuesSell}"  var="mapKey" indexVar="key">                 
+                                                                        <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                                                        </aura:iteration></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-panel__body">
+                                                            
+                                                            <div class="slds-section slds-is-open">
+                                                                <h3 class="slds-section__title">
+                                                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                                        
+                                                                        <span class="slds-truncate" title="Open Bids">Open Bids</span>
+                                                                    </button>
+                                                                </h3>
+                                                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                                    <p><aura:iteration items="{!v.mapValuesInterest}"  var="mapKey" indexVar="key">                 
+                                                                        <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                                                        </aura:iteration></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slds-panel__body">
+                                                            <div class="slds-section slds-is-open">
+                                                                <h3 class="slds-section__title">
+                                                                    <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                                                        
+                                                                        <span class="slds-truncate" title="Open Offers">Open Offers</span>
+                                                                    </button>
+                                                                </h3>
+                                                                <div aria-hidden="false" class="slds-section__content" id="expando-unique-id">
+                                                                    <p><aura:iteration items="{!v.mapValuesOffer}"  var="mapKey" indexVar="key">                 
+                                                                        <strong><p>{!mapKey.key} - {!mapKey.value}</p> </strong>                
+                                                                        </aura:iteration></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

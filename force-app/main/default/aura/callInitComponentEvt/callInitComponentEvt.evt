@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Event to call init in component" >
+    <aura:attribute name="dummyString" type="string" description="Event to call init in component" />
+</aura:event>

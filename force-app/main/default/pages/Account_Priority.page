@@ -1,0 +1,17 @@
+<apex:page controller="Priority" LightningStylesheets="True">
+    <apex:Form >
+        <apex:pageBlock title="Priority" >
+            <apex:pageBlockSection title="Account Email" columns="1" >
+                <apex:inputText label="Email" value="{!emailAcc }"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Priority Form" columns="1" >
+                <apex:inputField label="Title" Value="{!prio.Title__c}"/>
+                <apex:inputField label="Description" Value="{!prio.Description__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+              <apex:commandButton action="{!save}" value="save"/>
+          </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:Form>
+</apex:page>

@@ -1,0 +1,561 @@
+<apex:page showHeader="true" sidebar="false" controller="Create_Contract_ControllerV1" docType="html-5.0" title="Create Contract" id="myPage">
+    
+    
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <style>
+            .delIcon{
+                width: 20px;
+                height: 17px;
+                background-color: grey;
+                color: #fff;
+                font-weight: bold;
+                border-radius: 15px;
+                text-align: center;
+                cursor:pointer;
+                padding-top:3px;
+            }
+            .dateFormat{
+                display:none;
+            }
+            .lc > select {
+                display:none;
+            }
+        </style>
+    </head>
+   
+   
+    <script src="{!$Resource.staticresource1}"></script> 
+    <script src="{!$Resource.staticresource2}"></script>
+    
+  <!--  <div class="container-fluid">
+        <div class="col-sm-12">    -->
+            <apex:form styleClass="form-horizontal" id="my_form">
+                <!--
+                <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+                <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+
+                <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+                <apex:includeScript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+                -->
+                <style type="text/css">
+                    .lookupInput {
+                         display: table-footer-group;
+                     }
+                     .myCustomMessage .message {
+                        height:65px;
+                     }
+                </style>
+
+                <script type="text/javascript">
+               
+                    $ = jQuery.noConflict();
+                    $(document).ready(function() {
+                         $('[id$=quantity]').change(function() {
+                           
+                                var quan=$('[id$=quantity]').val();
+
+                                var pq=$('[id$=pq]').val();
+
+                                if(pq!=quan){
+                                    $('[id$=pq]').val(quan);
+                                }
+                                
+                                var pq2=$('[id$=quid]').val();
+
+                                if(pq2!=quan){
+                                    $('[id$=quid]').val(quan);
+                                }
+                          });
+                          
+                          $('[id$=dynFieldName]').change(function() {
+                           
+                                var changeAccountVal = $('[id$=dynFieldName]').val();
+                                $('[id$=accid]').val(changeAccountVal);
+                              
+                          });
+                          
+                                        
+                          $('.input2').css({
+                              'font-size': '14px',
+                              'line-height': '1.42857143',
+                              'color': '#555',
+                              'background-color': '#fff',
+                              'background-image': 'none',
+                              'border-radius': '4px',
+                              '-webkit-box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                              'box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                              '-webkit-transition': 'border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s',
+                              '-o-transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                              'transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                              'border': '1px solid #ccc'
+                        });
+
+                         $('.select2').css({
+                              'font-size': '14px',
+                              'line-height': '1.42857143',
+                              'color': '#555',
+                              'background-color': '#fff',
+                              'background-image': 'none',
+                              'border-radius': '4px',
+                              '-webkit-box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                              'box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                              '-webkit-transition': 'border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s',
+                              '-o-transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                              'transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                              'border': '1px solid #ccc',
+                              'height': '24px'
+                        });
+                   });
+                   
+                   function onQuantityCahnged(){
+                       var quan=$('[id$=quantity]').val();
+
+                        var pq=$('[id$=pq]').val();
+
+                        if(pq!=quan){
+                            $('[id$=pq]').val(quan);
+                        }
+                        
+                        var pq2=$('[id$=quid]').val();
+
+                        if(pq2!=quan){
+                            $('[id$=quid]').val(quan);
+                        }
+                   }
+                   
+                    function futureRate(ctid,fxid) {
+                        var sp=ctid.split(":");
+                        var ctvalue=$('[id$=ct]').val();
+    
+                        var pq=$('[id$=fx]').val();
+                        passCurrencyValuesWithoutID(sp[5],ctvalue);
+                    }
+
+                    function renderCom() {
+                        var ss=$('[id$=pt]').val();
+                    }
+                    function renderPriceCom() {
+                        $('.input2').css({
+                          'font-size': '14px',
+                          'line-height': '1.42857143',
+                          'color': '#555',
+                          'background-color': '#fff',
+                          'background-image': 'none',
+                          'border-radius': '4px',
+                          '-webkit-box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                          'box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                          '-webkit-transition': 'border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s',
+                          '-o-transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                          'transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                          'border': '1px solid #ccc'
+                        });
+
+                         $('.select2').css({
+                          'font-size': '14px',
+                          'line-height': '1.42857143',
+                          'color': '#555',
+                          'background-color': '#fff',
+                          'background-image': 'none',
+                          'border-radius': '4px',
+                          '-webkit-box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                          'box-shadow': 'inset 0 1px 1px rgba(0,0,0,.075)',
+                          '-webkit-transition': 'border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s',
+                          '-o-transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                          'transition': 'border-color ease-in-out .15s,box-shadow ease-in-out .15s',
+                          'border': '1px solid #ccc',
+                          'height': '24px'
+                        });                       
+                     }
+                     
+                </script>
+                
+                <apex:outputPanel id="pdfID">
+                    <script type="text/javascript">                        
+                        function openSendPDF() {
+                            if('{!successmessage}' == 'true') {
+                                window.open("/apex/sendContract?id="+'{!contractID}' , "_blank", "toolbar=No, scrollbars=No, resizable=No, width=600, height=600, left = 400, top = 50");
+                            }
+                        }
+                    </script>
+             </apex:outputPanel>  
+             
+             <apex:outputPanel styleClass="myCustomMessage">             
+                 <apex:pageMessages escape="false" id="pm"/>
+             </apex:outputPanel>
+                 
+             <apex:actionFunction name="passCurrencyValuesWithoutID" action="{!futureRate}" reRender="pgbs2" status="load" oncomplete="renderCom(); renderPriceCom();">
+                 <apex:param id="qidc" name="index" value="" assignTo="{!index}"/>
+                 <apex:param id="fnc" name="pricecurrency" value="" assignTo="{!priceCurrency}"/>
+             </apex:actionFunction>
+             
+             <apex:actionFunction name="myActionFun" action="{!updatePriceCompISOCode}" status="loading" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs2, myJS">
+                 <apex:param id="index_fxRate" name="index_fxRate" value=""/>
+              <!--   <apex:param id="changedCurrency" name="changedCurrency" value=""/>-->
+             </apex:actionFunction>
+             
+             <apex:actionFunction name="callRenderComponent" action="{!renderComponent}" status="loading" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs2, myOPPPP, pricefromData"/>
+             
+             <apex:pageBlock title="Create Contract" tabStyle="Account" id="myPageBlock">
+                     <apex:pageBlockButtons id="pgbb" location="top" title="Save">
+                          <apex:commandButton value="Save" action="{!saveContract}" status="loading" reRender="my_form"/>
+                          <apex:commandButton value="Save & Send Contract" action="{!saveContract}" status="loading" reRender="my_form" id="sendContract" oncomplete="openSendPDF();"/>
+                           <apex:actionStatus startText=" (In Progress...)" id="loading">
+                                <apex:facet name="start">
+                                    <apex:image value="/img/loading24.gif" height="36" width="36"/>
+                                </apex:facet>
+                            </apex:actionStatus>
+                        </apex:pageBlockButtons>
+                        Select a Template
+                        <apex:inputField value="{!con.Contract_Template__c}" id="details">
+                            <apex:actionSupport event="onchange" action="{!copyTemplateValues}" rerender="my_form, myJS" status="loading"/>
+                        </apex:inputField>
+                        <apex:pageBlockSection id="pgbs" title="General Information" collapsible="true" columns="3">
+                            
+                        <table id="myHTMLTable">
+                            <tr id="myRow">
+                                
+                                <apex:selectList label="Select Type" value="{!selectedvalue}" multiselect="false" size="1" onchange="callRenderComponent(); return false;">
+                                    <apex:selectOptions value="{!Opts}"></apex:selectOptions>
+                                </apex:selectList>
+                                
+                            <!--    <apex:inputField value="{!pricingHeader.Record_Type__c}" style="width:135px;" onchange="callRenderComponent(); return false;"/> -->
+                                <apex:pageBlockSectionItem labelTitle="priceType" dataTitle="priceType" id="myPagesectionId">
+                                    <apex:inputField value="{!con.Price_Type__c}" onchange="showfield(this, false);" style="width:107px;margin-left: -10px;"  id="priceTypeId"/>
+                                </apex:pageBlockSectionItem>
+                            </tr>
+                        </table>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Contract Currency"/>
+                            <apex:inputField value="{!con.Contract_Currency__c}" id="contrCurrncy" label="Contract Currency" style="width:165px;">
+                                <script>
+                                    document.getElementById('{!$Component.contrCurrncy}_lkid').value = '{!listOfTemp[0].CERM__Contract_Currency__c}';
+                                    document.getElementById('{!$Component.contrCurrncy}').value = '{!listOfTemp[0].CERM__Contract_Currency__r.name}';
+                                </script>
+                                
+                                <apex:actionSupport action="{!renderFxRate}" status="loading" event="onchange" oncomplete="callRenderComponent();renderCom();renderPriceCom();" reRender="pgbs2">
+                                </apex:actionSupport> 
+                            </apex:inputField>
+                        </apex:pageBlockSectionItem>                   
+                        <apex:inputField value="{!conitem.Split_By__c}" style="width:100px;" id="splitById"/>
+                        
+                        <apex:inputField value="{!con.Account__c}" id="dynFieldName" style="width:100px;">
+                            <apex:actionSupport event="onchange" action="{!onAccountChange}" rerender="pgbs2,cn" status="loading"/>                                                           
+                            <script>
+                                // document.getElementById('{!$Component.dynFieldName}_lkid').value = '{!listOfTemp[0].CERM__Account__c}';
+                                //  document.getElementById('{!$Component.dynFieldName}').value = '{!listOfTemp[0].CERM__Account__r.name}';
+                            </script>
+                            
+                       
+                        </apex:inputfield>
+                        <apex:inputField value="{!conitem.Business_Location__c}" id="bizLocationName" label="Terminal/Plant">
+                            <apex:actionSupport event="onchange" action="{!bushelRender}" rerender="cn" status="loading"/>                                                           
+                            <script>
+                                 document.getElementById('{!$Component.bizLocationName}_lkid').value = '{!listOfTemp[0].CERM__MD_Business_Location__c}';
+                                 document.getElementById('{!$Component.bizLocationName}').value = '{!listOfTemp[0].CERM__MD_Business_Location__r.name}';
+                             </script>
+                        </apex:inputfield>
+                        <table>
+                            <tr>
+                                <apex:inputField value="{!conitem.DeliveryStartDate__c}" label="Delivery Period" style="width:95px; ">
+                                    <apex:actionSupport event="onchange" action="{!bushelRender}" rerender="cn" status="loading"/> 
+                                </apex:inputField>
+                                <apex:pageBlockSectionItem labelTitle="Delivery Period" dataTitle="Delivery Period" >
+                                    <apex:inputField value="{!conitem.DeliveryEndDate__c}" style="width:95px; ">
+                                        <apex:actionSupport event="onchange" action="{!bushelRender}" rerender="cn" status="loading"/> 
+                                    </apex:inputField>
+                                </apex:pageBlockSectionItem>
+                            </tr>
+                        </table>
+                        
+                        <apex:inputField value="{!conitem.Commodity__c}" id="commodityName">
+                        
+                               <apex:actionSupport event="onchange" action="{!renderComponent}" rerender="cn,pgbs2,my_list" status="loading" oncomplete="renderCom();renderPriceCom();"/>
+                   
+                            <!--  <apex:actionSupport event="onchange" rerender="my_list, pgbs2" status="loading" oncomplete="renderCom(); renderPriceCom();"/>  
+                              -->         
+                        </apex:inputField>
+                        
+                        
+                        <apex:inputField value="{!conitem.Grade__c}"/>
+                        <apex:inputField value="{!conitem.CropYear__c}" style="width:165px; "/>
+                        
+                        <table>
+                            <tr>
+                                <apex:inputField value="{!conitem.Quantity__c}" label="Contract Quantity" onchange="onQuantityCahnged(); return false;" id="quantity" style="width:100px; "/>
+                                <apex:pageBlockSectionItem >
+                                    <apex:inputField value="{!conitem.UoM__c}" style="width:90px;" >
+                                        <apex:actionSupport action="{!bushelRender}" status="loading" event="onchange" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs,pgbs2,cn"/>
+                                    </apex:inputField>
+                                </apex:pageBlockSectionItem>
+                            </tr>
+                        </table>
+                               <apex:selectList id="my_list" value="{!conitem.FuturesMonth__c}" size="1" label="Future Months" >
+                                    <apex:actionSupport action="{!futuremonth}" status="loading" event="onchange" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs2"/>
+                                    <apex:selectOptions value="{!listOfDropDown}"/>
+                                </apex:selectList> 
+                                
+                                <apex:inputField value="{!con.Marketing_Pool__c}" style="width:110px;"/>                                
+                                
+                                <apex:inputField value="{!con.Dispute_Resolution__c}" style="width:165px;"/>
+                                <apex:inputField value="{!conitem.Market_Region__c}" label="Price Market Area" style="width:165px;" id="marketRegionName">
+                                    <script>
+                                        document.getElementById('{!$Component.marketRegionName}_lkid').value = '{!listOfTemp[0].CERM__Market_Region__c}';
+                                        document.getElementById('{!$Component.marketRegionName}').value = '{!listOfTemp[0].CERM__Market_Region__r.name}';
+                                    </script>
+                                </apex:inputField>
+                                <apex:inputField value="{!con.Logistics_Coordinator__c}" id="logCorName" styleClass="lc" style="width:165px; ">
+                                    <script>
+                                        document.getElementById('{!$Component.logCorName}_lkid').value = '{!listOfTemp[0].CERM__Logistics_Coordinator__c}';
+                                        document.getElementById('{!$Component.logCorName}').value = '{!listOfTemp[0].CERM__Logistics_Coordinator__r.name}';
+                                    </script>
+                                </apex:inputField>  
+                                <apex:inputField value="{!con.Trader__c}" id="traderName" style="width:165px;">
+                                    <script>
+                                        document.getElementById('{!$Component.traderName}_lkid').value = '{!listOfTemp[0].CERM__Trader__c}';
+                                        document.getElementById('{!$Component.traderName}').value = '{!listOfTemp[0].CERM__Trader__r.name}';
+                                    </script>
+                                </apex:inputField>
+                                <apex:inputField value="{!con.External_Reference__c}" style="width:200px; "/>
+                                <apex:inputField value="{!con.Delivery_Instructions__c}" label="Additional Text"/>
+                                
+                                    <apex:inputField value="{!conitem.Price_From__c}" style="width:165px;" id="pricefromData">
+                                        <apex:actionSupport action="{!averagePricing}" status="loading" event="onchange" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs2, pm"/>
+                                    </apex:inputField>
+                                    <apex:inputField value="{!conitem.Price_To__c}" style="width:165px;" id="pricetoData">
+                                        <apex:actionSupport action="{!averagePricing}" status="loading" event="onchange" oncomplete="renderCom(); renderPriceCom();" reRender="pgbs2, pm"/>
+                                    </apex:inputField>
+                                                            
+                            </apex:pageBlockSection>
+
+                            <apex:pageBlockSection collapsible="true" columns="3" id="pgbs1" title="Terms">
+                                <table>
+                                    <tr>
+                                        <apex:inputField value="{!conitem.IncoTerm__c}" style="width:100px;">
+                                              <apex:actionsupport event="onchange" action="{!rendercomponent}" rerender="pgbs2" status="loading"/>
+                                        </apex:inputField>
+                                        <apex:pageBlockSectionItem >
+                                            <apex:inputField value="{!conitem.IncoTerm2__c}" style="margin-left:-50px;"/>
+                                        </apex:pageBlockSectionItem>
+                                    </tr>
+                                    </table>
+                                    <apex:inputField value="{!conitem.PaymentTerm__c}" style="width: 150px;"/>
+                           <apex:inputField value="{!conitem.Title_Transfer__c}" style="width: 150px;"/>
+                                   
+                                    <apex:inputField value="{!conitem.Governing_Weights__c}" />
+                                    <apex:inputField value="{!conitem.GoverningGrades__c}"/>
+                                    <apex:inputField value="{!conitem.GoverningTerms__c}" style="width: 100px; margin-right:150px;"/>
+                                    <apex:inputField value="{!conitem.ToleranceType__c}" style=" width: 150px;"/>
+                                    <apex:inputField value="{!conitem.ToleranceLowLimit__c}" label="Under/Over Limit" style="width: 150px;"/>
+                                    <apex:pageBlockSectionItem labelTitle="Under/Over Limit">
+                                        <apex:inputField value="{!conitem.ToleranceUpperLimit__c}" style="margin-left: -95px;"/>
+                                    </apex:pageBlockSectionItem>     
+                                    
+                                    <apex:inputField value="{!conitem.FCL__c}">
+                                        <apex:actionSupport event="onchange" action="{!calcContractQuantity}" rerender="pgbs" status="calcQuanityStatus"/>
+                                        <apex:actionStatus startText="Processing..." id="calcQuanityStatus"/>
+                                    </apex:inputfield>
+                                    
+                                    <apex:inputField label="# Bags/Tote" value="{!conitem.Bags__c}">
+                                        <apex:actionSupport event="onchange" action="{!calcContractQuantity}" rerender="pgbs" status="calcQuanityStatus"/>
+                                        <apex:actionStatus startText="Processing..." id="calcQuanityStatus"/>
+                                    </apex:inputField>
+                                    
+                                    <apex:inputField value="{!conitem.Weight_Per_Bag__c}">
+                                    <apex:actionSupport event="onchange" action="{!calcContractQuantity}" rerender="pgbs" status="calcQuanityStatus"/>
+                                        <apex:actionStatus startText="Processing..." id="calcQuanityStatus"/>
+                                    </apex:inputField>
+                                    
+                                    <apex:inputField value="{!conitem.Bag_UoM__c}">                              
+                                    <apex:actionSupport event="onchange" action="{!calcContractQuantity}" rerender="pgbs" status="calcQuanityStatus"/>
+                                        <apex:actionStatus startText="Processing..." id="calcQuanityStatus"/>
+                                    </apex:inputField>
+                                    
+                                    <apex:inputField value="{!conitem.Packaging_Material_Weight__c}">
+                                    <apex:actionSupport event="onchange" action="{!calcContractQuantity}" rerender="pgbs" status="calcQuanityStatus"/>
+                                        <apex:actionStatus startText="Processing..." id="calcQuanityStatus"/>
+                                    </apex:inputField>
+                                    
+                                   <apex:inputField value="{!conitem.Discount_Schedule__c}" Label="Discount Schedule">
+                                   </apex:inputField>
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection collapsible="true" columns="1" id="pgbs2" title="Price Components">
+                        <apex:actionFunction name="delItem" action="{!removeComponent}" reRender="pgbs2" status="load">
+                            <apex:param assignTo="{!delComponentIndex}" value="" name="arg5"/>
+                        </apex:actionFunction>
+                        <apex:commandButton style="width:180px" styleClass="btn btn-primary" action="{!addPrice}" status="load" id="adp" title="Add More Component" value="Add More Component" reRender="pgbs2" oncomplete="renderPriceCom();"/>
+                        <apex:variable value="{!0}" var="cnt"/>
+                        <apex:variable value="{!0}" var="indx"/>
+                        <apex:pageBlockTable value="{!componentList}" var="enr" id="pbt1" title="test {!componentList.size}">
+                            <apex:column headerValue="Action">
+                                   <div class="delIcon" onClick="delItem('{!indx}');">X</div>
+                                   <apex:variable value="{!indx+1}" var="indx"/>
+                            </apex:column>
+                            <apex:column headerValue="Component">
+                                <apex:inputField value="{!enr.Components__c}" id="com" style="width:120px;"/>
+                            </apex:column> 
+                            <apex:column headerValue="Commodity">
+                                <apex:inputField value="{!enr.Commodity__c}" style="width:120px;"/>
+                            </apex:column> 
+                            <apex:column headerValue="Grade" rendered="false" >
+                                <apex:inputField value="{!enr.Grade__c}" style="width:55px;" />
+                            </apex:column>                              
+                            <apex:column headerValue="Currency Type" id="myFxColId" rendered="false">
+                                <apex:inputField value="{!enr.Price_Currency__c}" onchange="callJS({!cnt});" style="width:50px">
+                                    <apex:variable var="cnt" value="{!cnt + 1}"/>
+                                </apex:inputField>
+                            </apex:column>                     
+                            <apex:column headerValue="Priced Date">
+                                <apex:inputField value="{!enr.Priced_Date__c}" style="width:60px;"/>
+                            </apex:column>
+                            <apex:column headerValue="%">
+                                 <apex:inputField value="{!enr.Discount__c}" style="width:30px" id="disc"/>
+                            </apex:column>
+                            <apex:column headerValue="Price">
+                                 <apex:inputField value="{!enr.Price__c}" style="width:75px" id="pr" rendered="{!enr.Type_Txt__c != 'Percentage'}"/>
+                                 <apex:outputField value="{!enr.Price__c}" style="width:75px" id="oppr" rendered="{!enr.Type_Txt__c = 'Percentage'}"/>
+                            </apex:column>
+                            <apex:column headerValue="Per">
+                                <apex:inputField value="{!enr.Per__c}" style="width:75px" id="per" rendered="{!enr.Type_Txt__c != 'Percentage'}"/>
+                                <apex:outputField value="{!enr.Per__c}" style="width:75px" id="opper" rendered="{!enr.Type_Txt__c = 'Percentage'}"/>
+                            </apex:column>
+                            <apex:column headerValue="PerUom">                     
+                                <apex:inputField value="{!enr.UoM__c}" id="uom"  style="width:60px;" rendered="{!enr.Type_Txt__c != 'Percentage'}"/>
+                                <apex:outputField value="{!enr.UoM__c}" id="opuom"  style="width:60px;" rendered="{!enr.Type_Txt__c = 'Percentage'}"/>
+                            </apex:column>
+                            <apex:column headerValue="Priced Quantity">
+                                <apex:inputField value="{!enr.Priced_Quantity__c}" id="pq" style="width:80px;" rendered="{!enr.Type_Txt__c != 'Percentage'}"/>
+                                <apex:outputField value="{!enr.Priced_Quantity__c}" id="oppq" style="width:80px;" rendered="{!enr.Type_Txt__c = 'Percentage'}"/>
+                            </apex:column>
+                            <apex:column headerValue="Account">
+                                <apex:inputField value="{!enr.Account__c}"  id="fx" style="width:100px;"/>
+                               <!-- <apex:outputField value="{!enr.Account__c}" id="opfx" style="width:80px;" rendered="{!enr.Type_Txt__c = 'Percentage'}"/> -->
+                            </apex:column>
+                            <apex:column headerValue="Exclud">
+                                <apex:inputField value="{!enr.Statistical_Component__c}"  id="Stat" style="width:40px;"/>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                        <apex:commandButton value="Generate Items" title="Split" id="bt" style="width:120px" action="{!splitContract}" status="load" reRender="cn, pm" oncomplete="renderPriceCom();"/>
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection >
+                        <center>
+                            <apex:outputPanel id="ld">
+                                <apex:actionStatus startText="(In Progress...)" id="load">
+                                    <apex:facet name="start">
+                                        <apex:image value="/img/loading24.gif" height="36" width="36"/>
+                                    </apex:facet>
+                                </apex:actionStatus>
+                              </apex:outputPanel>
+                        </center>
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection title="Contract Item" id="cn" collapsible="true" columns="1">
+                               <apex:pageBlockTable value="{!conMap}" var="cm" id="pbt" >
+                                    <apex:column headerValue="Account">
+                                        <apex:inputField value="{!conMap[cm].CERM__Account__c}" id="accid" style="width:80px"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Terminal/Plant">
+                                        <apex:inputField value="{!conMap[cm].CERM__Business_Location__c}" id="astid" style="width:80px"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Commodity">
+                                        <apex:inputField value="{!conMap[cm].CERM__Commodity__c}" id="prid" style="width:80px"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Quantity">
+                                        <div class="col-sm-1">
+                                            <apex:inputField value="{!conMap[cm].CERM__Quantity__c}" id="quid" style="width:80px"/>
+                                        </div>
+                                    </apex:column>
+                                    <apex:column headerValue="Unit of Measure">
+                                        <div class="col-sm-1">
+                                            <apex:inputField value="{!conMap[cm].CERM__UoM__c}" id="uid" style="width:80px"/>
+                                        </div>
+                                    </apex:column>
+                                    <apex:column headerValue="Delivery Start Date">
+                                        <apex:inputField value="{!conMap[cm].CERM__DeliveryStartDate__c}" id="startid"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Delivery End Date">
+                                        <apex:inputField value="{!conMap[cm].CERM__DeliveryEndDate__c}" id="endid"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Futures Month">
+                                        <apex:inputField value="{!conMap[cm].CERM__FuturesMonth__c}" id="fugid" style="width:80px"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Governing Grades">
+                                        <apex:inputField value="{!conMap[cm].CERM__GoverningGrades__c}" id="ggid" style="width:80px"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Governing Terms">
+                                        <apex:inputField value="{!conMap[cm].CERM__GoverningTerms__c}" id="gtid"/>
+                                    </apex:column>
+                                    <apex:column headerValue="Governing Weights">
+                                        <apex:inputField value="{!conMap[cm].CERM__Governing_Weights__c}" id="gwid" style="width:80px"/>
+                                    </apex:column>
+                               </apex:pageBlockTable>
+                      
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:form>
+     <!--   </div>
+    </div>    -->
+    
+    <apex:outputPanel id="myJS">
+        <script>
+            var pageLoad = true;
+            var allInputTags = document.getElementsByTagName('input');
+            var labels = document.getElementsByTagName('LABEL');
+            var allSelectTags = document.getElementsByTagName('select');
+            for(var i=0; i< allInputTags.length; i++) {
+                if(allInputTags[i].id =='myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                    allInputTags[i].parentNode.parentNode.style.visibility = 'hidden';
+            }
+            
+            for (var i = 0; i < labels.length; i++) {
+                if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                    labels[i].style.visibility = 'hidden';
+            }
+            
+            showfield(document.getElementById('myPage:my_form:myPageBlock:pgbs:myPagesectionId:priceTypeId'), true);
+            
+            function showfield(name, isCallfromPageLoad) {
+                pageLoad = isCallfromPageLoad;
+                if(name.value == 'AP') {
+                    for(var i=0; i< allInputTags.length; i++) {
+                        if(allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            allInputTags[i].parentNode.parentNode.style.visibility = 'visible';
+                    }
+                    for (var i = 0; i < labels.length; i++) {
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            labels[i].style.visibility = 'visible';
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            labels[i].style.visibility = 'hidden';
+                    }
+                    for(var i=0; i< allSelectTags.length; i++) {
+                        if(allSelectTags[i].id == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            allSelectTags[i].style.visibility = 'hidden';
+                    }
+                }
+                else {
+                    for(var i=0; i< allInputTags.length; i++) {
+                        if(allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || allInputTags[i].id == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            allInputTags[i].parentNode.parentNode.style.visibility = 'hidden';
+                    }
+                    for (var i = 0; i < labels.length; i++) {
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricefromData' || labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:pricetoData')
+                            labels[i].style.visibility = 'hidden';
+                        if(labels[i].htmlFor == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            labels[i].style.visibility = 'visible';
+                    }
+                    for(var i=0; i< allSelectTags.length; i++) {
+                        if(allSelectTags[i].id == 'myPage:my_form:myPageBlock:pgbs:splitById')
+                            allSelectTags[i].style.visibility = 'visible';
+                    }
+                }
+                if(!pageLoad)
+                    callRenderComponent();
+            }
+            function callJS(count) {
+                myActionFun(count);
+            }
+        </script>  
+    </apex:outputPanel>  
+</apex:page>

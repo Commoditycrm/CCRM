@@ -1,0 +1,27 @@
+<aura:component >
+    <aura:attribute name="pc_componentId" type="String"/>
+    <aura:attribute name="pc_commodityId" type="String"/>
+    <aura:attribute name="pc_uomId" type="String"/>
+    <aura:attribute name="pc_AcctId" type="String"/>
+    
+    <aura:registerEvent name="mypricecomp" type="c:ContractEvent"/>
+    
+   <div style = "height:38%;width:28%">
+    
+        <l_lookup:Lookup objectType="CERM__MD_Price_Component__c" label="Component" selectedRecordId="{!v.pc_componentId}"/>
+        <l_lookup:Lookup objectType="CERM__Commodity__c" label="Commodity" selectedRecordId="{!v.pc_commodityId}"/>
+       
+       <div style = "padding:5px 25px 0px 25px;width:205%">
+       <lightning:input type="date" aura:id="pricedDate" label="Priced Date"/>
+       <lightning:input type="number" aura:id="pricedQty" label="Priced Quantity"/>           
+       <lightning:input type="number" aura:id="price" label="Price"/>   
+       <lightning:input type="number" aura:id="per" label="Per"/> 
+       </div>
+       
+       <l_lookup:Lookup objectType="CERM__MD_Unit_of_Measure__c" label="UoM" selectedRecordId="{!v.pc_uomId}"/>
+       <l_lookup:Lookup objectType="Account" label="Account" selectedRecordId="{!v.pc_AcctId}"/>
+           
+       <lightning:button label="Submit" variant="brand" onclick="{!c.disp}"/>
+       
+   </div>
+</aura:component>

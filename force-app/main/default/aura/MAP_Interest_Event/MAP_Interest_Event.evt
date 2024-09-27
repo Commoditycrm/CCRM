@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="INTERESTaccounts" Type="Account"/>
+    <aura:attribute name="menuvalue" Type="string"/>
+</aura:event>

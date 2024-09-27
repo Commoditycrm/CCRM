@@ -1,0 +1,280 @@
+<apex:page standardController="Contract__c" extensions="CERM_OfferLetter_CTRL"  renderAs="PDF" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false">
+  <html>
+        <head>
+            <style>
+            
+           
+               @page{
+                    @bottom-right{
+                        font-family:sans-serif;
+                        font-size:50%;
+                        content: counter(page);
+                        
+                    }
+           
+               
+                    @bottom-center{
+                    
+                    content:element(line_diviter);
+                    
+                    }
+                    
+                    @bottom-left{
+                        content: element(footer);
+                        
+                    }
+                    @top-left{
+                        content: element(header);
+                    }
+                    margin-top: 90px;
+                    margin-bottom: 130px;
+                }
+                div.header {
+                    padding: 10px;
+                    position: running(header);
+                }
+                div.footer {
+                             padding: 10px;
+                               position: running(footer);
+                               display: block;
+                }
+                   
+                   table#t01{
+                       border: 0 px solid black;
+                       -fs-table-paginate: paginate;
+                       border-collapse: collapse !important;
+                       
+                       border-spacing: 0;
+                       page-break-inside:auto; 
+
+                  
+                   }
+                   
+                  table.tblclass td,tr,th{
+                   border: 0.5px solid black;
+                   border-collapse: collapse !important;
+                   padding: 5px;
+                   page-break-inside:avoid; page-break-after:auto
+
+                   
+                }
+                 
+                  table.tb2class td,tr,th{
+                   border: 0px solid black;
+                   border-collapse: collapse !important;
+                   padding: 5px;
+                   page-break-inside:avoid; page-break-after:auto
+
+                   
+                }
+               
+                div.bottom{
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-top: none;
+                    margin-bottom: none;
+                }
+                
+                div.col {
+                    float: left;
+                    padding : 1px;
+                    width: 33%;
+                }
+                div.col1 {
+                    text-align:right;
+                    vertical-align:middle;
+                    width: 60%;
+                }
+                div.col2 {
+                    width:40%;
+                    text-align:center;
+                    vertical-align:middle;
+                }
+               
+            </style>
+        </head>
+        <body>
+            <div class="footer" name="footer">
+            
+            
+            <hr style="border-top:2px double black; width:100%;"/>
+            <apex:image url="{!footerlogo}" width="200px" height="50px" style="float:right;"/> 
+                <table style="width:70%; font-size:13px;" >
+                
+                   <tr>
+                       <td colspan="2" style="text-align:center"><b>M. M. CERAMICS AND FERRO ALLOYS</b></td>
+                   </tr>
+                   
+                   <tr>
+                       <td colspan="2" style="text-align:center">501 - 502, NAVKAR COMMERICAL COMPLEX,</td>
+                   </tr>
+                   <tr>
+                       <td colspan="2" style="text-align:center">OPP. ANDHERI COURT, NEAR ANDHERI RAILWAY STATION,</td>
+                   </tr> 
+                   <tr>
+                       <td colspan="2" style="text-align:center">ANDHERI EAST, MUMBAI - 400069</td>
+                   </tr>     
+                   <tr>
+                       <td colspan="2" style="text-align:center">E-MAIL: mmceramics@mtcgroup.in </td>
+                   </tr>
+                   
+              </table> 
+              </div>                    
+        <div style="">
+                <div class="header">
+                
+                <apex:image url="{!logo}" width="200px" height="50px" style="float:left;"/> 
+                    <table style="width:70%; ">
+                        <tr>
+                               <td colspan="4" style="text-align:right;font-size:20px;"><b>M. M. CERAMICS </b></td>
+                           </tr>
+                           
+                         <tr>
+                               <td colspan="4" style="text-align:right;font-size:20px;"><b><apex:outputtext value="&" /> FERRO ALLOYS</b></td>
+                           </tr>  
+                           
+                        
+                        
+                    </table>
+                    
+                <hr style="border-top:2px double black; width:100%;"/>
+                </div>
+                
+                </div> 
+        
+        
+          <div class = "col1">  
+            <h3>Offer Letter </h3>
+          </div>
+          <div class="content" style="font-size:14px;padding:15px;">
+          <table id="tb1" class = "tb2class" style="width:100%; font-size:13px;font-family:Times" cellpadding="3">
+                             <tr>
+                                <th style="width:15%;vertical-align:top;">MMC/1819/96</th>
+                                
+                                <th style="width:50%;vertical-align:top;text-align:right">Date</th>
+                                
+                             </tr>
+                             <tr><td  style="font-size:15px;">M/s{!Trader_name}</td></tr>
+          
+          </table>
+          <div align= "center" style = "font-family:Times" >
+                               <u><b>Kind Attn. Mr. {!accname}</b></u>
+           </div><br/>
+          </div>
+          
+          <table id="tb2" class = "tb2class" style="width:100%; font-size:13px;font-family:Times" cellpadding="3">
+                              <tr>
+                                <th  style="font-size:15px;">Sub:{!Comm_name }</th>
+                             </tr>
+                             <tr>
+                            <td>
+                                <p>
+                                    Dear Sirs,
+                                </p>
+                                <p>
+                                    With reference to your mail regarding your requirement for below items
+                                    Please find below our lowest price for the same. 
+ 
+                                </p>
+                            </td>
+                        </tr>    
+          </table>
+          
+          <table id = "t01" class = "tblclass" style = "width:100%">
+                            
+                             <tr>
+                                 <td> SL NO </td>
+                                 <td> MATERIAL</td>
+                                 <td> QUANTITY (KG)</td>
+                                 <td> PRICE (RS/KG)</td>
+                                 
+                                 
+                             </tr>
+                             <tr>
+                                 <td>01</td>
+                                 <td>{!Comm_name }</td>
+                                  <td>{!Quantity } Kgs</td>
+                                   
+                                   <td>
+                             <apex:outputText value="{0, number, #,###.##}">
+                                <apex:param value="{!Price }"/>
+                            </apex:outputText>
+                            </td>
+                              
+                             </tr>
+           </table>
+            
+            
+           <div  style = "font-family:Times" >
+                               <u>Origin- Norway</u>
+           </div><br/>
+           <div  style = "font-family:Times" >
+                               <u>COMMERCIAL TERMS AND CONDITIONS:</u>
+           </div><br/>
+           <table id = "t01" class = "tblclass" style = "width:100%">
+                            
+                             <tr>
+                                 <td>PRICE</td>
+                                 <td>F.O.R. Basis</td>
+                                 
+                                 
+                                 
+                             </tr>
+                             <tr>
+                                 <td>TAXES AND DUTIES</td>
+                                 <td>Extra as applicable at the time of dispatch
+                                    (Present rate:+ GST)
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td>PAYMENT</td>
+                                 <td>3 Days
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td>DELIVERY</td>
+                                 <td>Immediate after order confirmation
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td>VALIDITY</td>
+                                 <td>Validity upto today 7 P.M.
+                                 </td>
+                             </tr>
+           </table><br/>
+           <div  style = "font-family:Times" >
+                               <u>INSPECTION ANDCONTENT VERIFICATION:</u>
+           </div><br/>
+           <div  style = "font-family:Times" >
+                               <p>For variation in content, please keep at least 50% of the material intact and inform us within 3 (three) 
+                               days of receipt of material. We shall depute our chemist for joint sampling and analysis. 
+                               The result of joint analysis will be binding on both. If the same is not intimated to us as above, 
+                               we shall not be liable for content variation and our analysis will be considered as final for all purposes.</p>
+           </div>
+           <div  style = "font-family:Times" >
+                               <p>Hope, you will find our offer in line with your requirement and favor us with your valued order.</p>
+           </div><br/><br/><br/><br/>
+           <div  style = "font-family:Times" >
+                               <b>Regards</b>
+           </div>
+           {!Trader_name}<br/>
+           <div  style = "font-family:Times" >
+                             <br/>  <u>North Zone</u>
+           </div><br/>
+           <div  style = "font-family:Times" >
+                               <p>M.M. Ceramics And Ferro Alloys, #405, Time Tower, MG Road, Gurugram-122002 (Haryana)</p>
+                               <p>Board :  (0124)  | 4262457-59 | Cell: +91-8826688739  | www.mtcgroup.in  | mail: deepak.mmc@mtcgroup.in</p>
+                               <p> Re-use, Re-duce And Re-cycle ¦Print only when necessary ¦ Switch off as you go ¦Recycle always  </p>
+           </div><br/>
+           <div  style = "font-size:13px;font-family:Times" >
+                               <p><u>CONFIDENTIALITY AND DISCLAIMER NOTICE : </u>Contents of this e-mail and its attachment(s) are confidential and intended only for the addressee(s) named in it. 
+                               The contents should not be disclosed to or copied in any manner by anyone other than the intended addressee(s). Any views or opinions expressed are solely those of 
+                               the sender and do not necessarily represent those of the company, unless otherwise stated specifically. Company neither accepts legal responsibility for the contents 
+                               of this e-mail nor responsible for any alteration made to it after it was sent by the original sender.  The recipients are requested to conduct a virus 
+                               check before opening any attachment(s) as the company does not accept liability for any damage caused as a result of any software viruses. 
+                               The company reserves the right to read incoming and outgoing emails.</p>
+           </div><br/>
+      </body>
+      </html>
+      
+</apex:page>
